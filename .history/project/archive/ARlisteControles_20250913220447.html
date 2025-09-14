@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives : Liste des Contrôles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="back-arrow" onclick="history.back()">←</div>
+        <div class="title">ARCHIVES : LISTE DES CONTRÔLES</div>
+    </header>
+
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Contrôle</th>
+                    <th>Checklist</th>
+                    <th>Action</th>
+                    <th>Note</th>
+                    <th>Signature</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>dim. 4 mai 2025</td>
+                    <td>DÉRATISATION</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>EQUIPE</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <div class="filter-group">
+            <span>CONTROLE</span>
+            <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>CATÉGORIE</span>
+            <button class="active" onclick="filterToggle(this)">TOUTES ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>MOIS</span>
+            <button class="active" onclick="filterToggle(this)">mai 2025 ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>JOUR</span>
+            <button class="active" onclick="filterToggle(this)">dim. 4 mai ↓</button>
+        </div>
+        <button class="filter-button" onclick="resetFilter()" title="Afficher tout">TOUS</button>
+    </footer>
+
+    <script>
+        // دالة بسيطة لتغيير زر الفلتر
+        function filterToggle(button) {
+            if (button.classList.contains('active')) {
+                if (button.textContent.includes('TOUS') || button.textContent.includes('TOUTES')) {
+                    button.textContent = button.textContent.replace('TOUS', 'SELECTION').replace('TOUTES', 'SÉLECTIONNÉES');
+                } else {
+                    if (button.textContent.includes('SELECTION')) {
+                        button.textContent = button.textContent.replace('SELECTION', 'TOUS').replace('SÉLECTIONNÉES', 'TOUTES');
+                    }
+                }
+            }
+        }
+        function resetFilter() {
+            const filterButtons = document.querySelectorAll('.filter-group button');
+            
+            filterButtons.forEach(button => {
+                button.textContent = button.textContent
+                    .replace('SELECTION', 'TOUS')
+                    .replace('SÉLECTIONNÉES', 'TOUTES');
+                button.classList.add('active');
+            });
+            
+            alert('تم إظهار جميع البيانات');
+        }
+    </script>
+</body>
+</html>

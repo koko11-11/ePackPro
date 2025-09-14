@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives : TRAÇABILITÉ PRODUITS</title>
+    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .photo-button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+        }
+
+        .photo-button:hover {
+            background-color: #3a7bc8;
+        }
+
+        .image-preview {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .image-preview.active {
+            display: flex;
+        }
+
+        .preview-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .preview-info {
+            color: white;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .nav-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+       
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="back-arrow" onclick="history.back()">←</div>
+        <div class="title">ARCHIVES : TRAÇABILITÉ PRODUITS</div>
+    </header>
+
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date/Heure</th>
+                    <th>Produit</th>
+                    <th>N° lot / DLC</th>
+                    <th>Photo</th>
+                    <th>Note</th>
+                    <th>Signature</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Date/Heure">sam. 19 juil. 2025<br>12:04</td>
+                    <td data-label="Produit">Tomates Bio</td>
+                    <td data-label="N° lot / DLC">LOT-1254<br>25/07/2025</td>
+                    <td data-label="Photo">
+                        <button class="photo-button" onclick="openImagePreview()">
+                                               <div class="icon-btn"><i class="fas fa-camera"></i></div>
+ 2 photos
+                        </button>
+                    </td>
+                    <td data-label="Note">Produit frais</td>
+                    <td data-label="Signature">EQUIPE</td>
+                    <td data-label="Actions">
+                        <button class="menu-button">⋮</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-label="Date/Heure">ven. 18 juil. 2025<br>10:30</td>
+                    <td data-label="Produit">Laitue</td>
+                    <td data-label="N° lot / DLC">LOT-9871<br>20/07/2025</td>
+                    <td data-label="Photo">
+                                            <button class="photo-button" onclick="openImagePreview()">
+                                               <div class="icon-btn"><i class="fas fa-camera"></i></div>
+ 2 photos
+                        </button>
+                    </td>
+                    <td data-label="Note">-</td>
+                    <td data-label="Signature">EQUIPE</td>
+                    <td data-label="Actions">
+                        <button class="menu-button">⋮</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-label="Date/Heure">jeu. 17 juil. 2025<br>15:45</td>
+                    <td data-label="Produit">Carottes</td>
+                    <td data-label="N° lot / DLC">LOT-5423<br>22/07/2025</td>
+                    <td data-label="Photo">
+                                          <button class="photo-button" onclick="openImagePreview()">
+                                               <div class="icon-btn"><i class="fas fa-camera"></i></div>
+ 2 photos
+                        </button>
+                    </td>
+                    <td data-label="Note">Livraison du matin</td>
+                    <td data-label="Signature">EQUIPE</td>
+                    <td data-label="Actions">
+                        <button class="menu-button">⋮</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+    <footer>
+        <div class="filter-group">
+            <span>PRODUIT</span>
+            <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+        </div>
+
+        <div class="filter-group">
+            <span>MOIS</span>
+            <button class="active" onclick="filterToggle(this)">juillet 2025 ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>JOUR</span>
+            <button class="active" onclick="filterToggle(this)">sam. 19 juil. ↓</button>
+        </div>
+        <button class="filter-button" onclick="resetFilter()" title="Afficher tout">TOUS</button>
+    </footer>
+
+    <div class="image-preview" id="imagePreview">
+        <button class="close-preview" onclick="closeImagePreview()">×</button>
+        <img class="preview-image" id="previewImage" src="" alt="Aperçu">
+        <div class="preview-info" id="previewInfo"></div>
+        <div class="navigation-buttons">
+            <button class="nav-button" onclick="navigateImage(-1)">Précédent</button>
+            <button class="nav-button" onclick="navigateImage(1)">Suivant</button>
+        </div>
+    </div>
+    
+    <script>
+        function filterToggle(button) {
+            if (button.classList.contains('active')) {
+                if (button.textContent.includes('TOUS') || button.textContent.includes('TOUTES')) {
+                    button.textContent = button.textContent.replace('TOUS', 'SELECTION').replace('TOUTES', 'SÉLECTIONNÉES');
+                } else {
+                    if (button.textContent.includes('SELECTION')) {
+                        button.textContent = button.textContent.replace('SELECTION', 'TOUS').replace('SÉLECTIONNÉES', 'TOUTES');
+                    }
+                }
+            }
+        }
+        function resetFilter() {
+            const filterButtons = document.querySelectorAll('.filter-group button');
+            filterButtons.forEach(button => {
+                button.textContent = button.textContent
+                    .replace('SELECTION', 'TOUS')
+                    .replace('SÉLECTIONNÉES', 'TOUTES');
+                button.classList.add('active');
+            });
+            alert('Tous les filtres ont été réinitialisés');
+        }
+        function openImagePreview(imageName, imageInfo) {
+            document.getElementById('previewImage').src = imageName;
+            document.getElementById('previewInfo').textContent = imageInfo;
+            document.getElementById('imagePreview').classList.add('active');
+        }
+
+        function closeImagePreview() {
+            document.getElementById('imagePreview').classList.remove('active');
+        }
+        function navigateImage(direction) {
+            alert(`Navigation ${direction > 0 ? 'suivante' : 'précédente'} - Cette fonctionnalité sera implémentée avec le backend`);
+        }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeImagePreview();
+            }
+        });
+    </script>
+</body>
+</html>

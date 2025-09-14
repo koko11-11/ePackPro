@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePackPro v5.201</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="logo-section">
+                <h1 class="logo">ePackPro</h1>
+                <div class="version">v5.20.1</div>
+            </div>
+
+            <div class="updates-badge">
+                <span class="star-icon"><i class="fas fa-star"></i></span>
+                <span>Nouveautés de la v6</span>
+            </div>
+
+            <div class="dashboard-section">
+                <h2 class="dashboard-title">MON TABLEAU DE BORD</h2>
+
+                <div class="stats-list">
+                    <div class="stat-item">
+                        <span class="stat-label">Vos rappels</span>
+                    </div>
+                    <div class="stat-item highlighted">
+                        <span class="stat-label">Vous avez 18 tâches en retard</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Vous avez 6 tâches pour aujourd'hui</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="datetime-section">
+                <div class="wifi-icon"><i class="fas fa-wifi"></i></div>
+                <div class="date">vendredi 12 septembre 2025</div>
+                <div class="time">19:03</div>
+            </div>
+        </div>
+
+        
+        <div class="main-content">
+
+            <div class="header">
+                <h2 class="welcome-text">BONJOUR, VEUILLEZ VOUS IDENTIFIER</h2>
+                <div class="header-icons">
+                    <div class="icon-btn"><i class="fas fa-database"></i></div>
+                    <div class="icon-btn"><i class="fas fa-temperature-quarter"></i></div>
+                    <div class="icon-btn"><i class="fas fa-camera"></i></div>
+                </div>
+            </div>
+
+    
+            <div class="user-selection-grid">
+                <div class="user-card" onclick="openPasswordModal()">
+                    <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+                    <div class="user-name">ABDEL</div>
+                </div>
+
+                <div class="user-card" onclick="openPasswordModal()">
+                    <div class="user-icon"><i class="fas fa-users"></i></div>
+                    <div class="user-name">EQUIPE</div>
+                </div>
+                
+                <div class="user-card" onclick="openPasswordModal()">
+                    <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+                    <div class="user-name">ADMIN</div>
+                </div>
+                
+                <div class="user-card" onclick="openPasswordModal()">
+                    <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+                    <div class="user-name">SUPERVISEUR</div>
+                </div>
+            </div>
+
+
+            <div class="footer">
+                <div class="help-text">
+                    Besoin d'aide ? Contactez CHR Numérique au 02 29 62 64 40
+                </div>
+                <div class="footer-buttons">
+                    <button class="footer-btn settings-btn"  onclick="openPasswordModal()"> <i class="fas fa-cog"></i></button>
+                    <button class="footer-btn power-btn"><i class="fas fa-power-off"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Mot de passe</h3>
+                <button class="close-btn" onclick="closePasswordModal()">×</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="password-display">
+                    <div class="password-dots" id="passwordDots"></div>
+                </div>
+
+                <div class="keypad-buttons">
+                    <button class="keypad-btn clear-btn" onclick="clearPassword()">C</button>
+                    <button class="keypad-btn del-btn" onclick="deleteLastDigit()"><i class="fas fa-backspace"></i></button>
+                </div>
+
+                <div class="keypad">
+                    <button class="keypad-btn number-btn" onclick="addDigit('1')">1</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('2')">2</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('3')">3</button>
+
+                    <button class="keypad-btn number-btn" onclick="addDigit('4')">4</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('5')">5</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('6')">6</button>
+
+                    <button class="keypad-btn number-btn" onclick="addDigit('7')">7</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('8')">8</button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('9')">9</button>
+
+                    <button class="keypad-btn special-btn"><i class="fas fa-cog"></i></button>
+                    <button class="keypad-btn number-btn" onclick="addDigit('0')">0</button>
+                    <button class="keypad-btn special-btn"><i class="fas fa-arrow-left"></i></button>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="action-btn cancel-btn" onclick="closePasswordModal()">
+                        <span class="btn-icon">×</span>
+                        <span>Annuler</span>
+                    </button>
+                    <button class="action-btn validate-btn" onclick="validatePassword()">
+                        <span class="btn-icon">✓</span>
+                        <span>Valider</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPassword = '123456';
+
+        function openPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            currentPassword = '';
+            updatePasswordDisplay();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            currentPassword = '';
+            updatePasswordDisplay();
+        }
+
+        function addDigit(digit) {
+            if (currentPassword.length < 6) {
+                currentPassword += digit;
+                updatePasswordDisplay();
+            }
+        }
+
+        function deleteLastDigit() {
+            currentPassword = currentPassword.slice(0, -1);
+            updatePasswordDisplay();
+        }
+
+        function clearPassword() {
+            currentPassword = '';
+            updatePasswordDisplay();
+        }
+
+        function updatePasswordDisplay() {
+            const dots = document.getElementById('passwordDots');
+            dots.innerHTML = '';
+            for (let i = 0; i < currentPassword.length; i++) {
+                dots.innerHTML += '<span class="dot">●</span>';
+            }
+        }
+
+        function validatePassword() {
+            if (currentPassword.length > 0) {
+        
+                if (currentPassword === "123456") { 
+                    window.location.href = "../css/dashboard.html"; 
+                } else {
+                    alert('Mot de passe incorrect');
+                    clearPassword();
+                }
+            } else {
+                alert('Veuillez saisir un mot de passe');
+            }
+        }
+
+        
+        document.getElementById('passwordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePasswordModal();
+            }
+        });
+    </script>
+</body>
+</html>

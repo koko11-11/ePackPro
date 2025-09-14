@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives Nettoyages Postes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+      <header>
+        <div class="back-arrow" onclick="history.back()">←</div>
+        <div class="title">  ARCHIVES : TEMPÉRATURES FRIGO</div>
+    </header>
+    <div class="content">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Frigo</th>
+                <th>Temp.</th>
+                <th>Checklist</th>
+                <th>Action</th>
+                <th>Note</th>
+                <th>Signature</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+
+     <footer>
+        <div class="filter-group">
+            <span>PLAN DE NETTOYAGE</span>
+            <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>ZONE</span>
+            <button class="active" onclick="filterToggle(this)">TOUTES ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>MOIS</span>
+            <button class="active" onclick="filterToggle(this)">septembre 2025 ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>JOUR</span>
+            <button class="active" onclick="filterToggle(this)">jeu. 11 sept. ↓</button>
+        </div>
+        <button class="filter-button" onclick="resetFilter()" title="Afficher tout"> TOUS</button>
+    </footer>
+    <script>
+        const data = [
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'CF VIANDES',sub:'SOUS-SOL',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'CF NEG FRUITS/LEGUMES',sub:'SOUS-SOL',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'CF NEG',sub:'SOUS-SOL',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'CF LEGUMES',sub:'SOUS-SOL',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'CF BOF',sub:'SOUS-SOL',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'I-ARMOIRE POSITIVE',sub:'CUISINE',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'H-ARMOIRE MARINADES 2',sub:'CUISINE',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'G-SALADETTE 2',sub:'CUISINE',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'F-SALADETTE 1',sub:'CUISINE',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'},
+            {date:'jeu. 11 sept. 2025 14:08',frigo:'E-ARMOIRE MARINADES 1',sub:'CUISINE',temp:'4,0 °C',checklist:'-',action:'-',note:'-',signature:'EQUIPE'}
+        ];
+        function renderTable(rows){
+            const t = document.getElementById('tbody');
+            t.innerHTML = '';
+            rows.forEach(x=> {
+                t.innerHTML += `<tr>
+                    <td><div>${x.date.split(' ')[0]}<br><small>${x.date.split(' ').slice(1).join(' ')}</small></div></td>
+                    <td><div class="frigo-name">${x.frigo}</div><div class="frigo-sub">${x.sub}</div></td>
+                    <td>${x.temp}</td>
+                    <td>${x.checklist}</td>
+                    <td>${x.action}</td>
+                    <td>${x.note}</td>
+                    <td>${x.signature}</td>
+                </tr>`;
+            });
+        }
+        function resetFilter(){ renderTable(data);}
+        renderTable(data);
+    </script>
+</body>
+</html>

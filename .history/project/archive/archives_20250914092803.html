@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Archives</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f0ff;
+            color: #444;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            background-color: #395a57;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        header .back-button {
+            cursor: pointer;
+            margin-right: 15px;
+            font-size: 22px;
+            user-select: none;
+        }
+        .container {
+            padding: 20px;
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .card {
+            background-color: white;
+            padding: 25px 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            user-select: none;
+        }
+
+        .card:hover {
+            background-color: #f5faff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            header {
+                font-size: 16px;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                font-size: 16px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="back-button" onclick="goBack()">&#8592;</div>
+        ARCHIVES
+    </header>
+
+<div class="container">
+    <div class="card" onclick="window.location.href='ARreception.html'">RÉCEPTION MARCHANDISES</div>
+    <div class="card" onclick="window.location.href='ARsuiviHuiles.html'">SUIVI HUILES</div>
+    <div class="card" onclick="window.location.href='ARtemperature.html'">TEMPÉRATURES FRIGO</div>
+    <div class="card" onclick="window.location.href='ARetiquettes.html'">ÉTIQUETTES PRODUITS</div>
+    <div class="card" onclick="window.location.href='ARnettoyages.html'">NETTOYAGES POSTES</div>
+    <div class="card" onclick="window.location.href='ARtracabilite.html'">TRAÇABILITÉ PRODUITS</div>
+    <div class="card" onclick="window.location.href='ARlisteControles.html'">LISTE DES CONTRÔLES</div>
+    <div class="card" onclick="window.location.href='ARtemperature.html'">TEMPÉRATURE DU CLAM</div>
+</div>
+
+
+
+    <script>
+        function goBack() {
+
+            if (history.length > 1) {
+                history.back();
+            } else {
+                alert('لا يوجد صفحة سابقة للرجوع إليها');
+            }
+        }
+    </script>
+
+</body>
+</html>

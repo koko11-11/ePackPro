@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Archives Réception Marchandises</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="back-arrow" onclick="history.back()">←</div>
+  <div class="title">ARCHIVES : RÉCEPTION MARCHANDISES</div>
+</header>
+
+<div class="content">
+  <table>
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Temp.</th>
+        <th>Checklist</th>
+        <th>N° lot / DLC</th>
+        <th>Action</th>
+        <th>Note</th>
+        <th>Signature</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <div class="filter-group">
+    <span>PRODUIT</span>
+    <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>CATEGORIE</span>
+    <button class="active" onclick="filterToggle(this)">TOUTES ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>MOIS</span>
+    <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>JOUR</span>
+    <button class="active" onclick="filterToggle(this)">TOUTES ↓</button>
+  </div>
+  <div>
+    <button class="eye-button" title="Afficher tout" onclick="alert('Afficher tout')">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" />
+      </svg>
+    </button>
+    <div class="eye-label">TOUS</div>
+  </div>
+</footer>
+
+<script>
+
+  function filterToggle(button) {
+    if (button.classList.contains('active')) {
+ 
+      if (button.textContent.includes('TOUS') || button.textContent.includes('TOUTES')) {
+        button.textContent = button.textContent.replace('TOUS', 'SELECTION').replace('TOUTES', 'SÉLECTIONNÉES');
+      } else {
+        if (button.textContent.includes('SELECTION')) {
+          button.textContent = button.textContent.replace('SELECTION', 'TOUS').replace('SÉLECTIONNÉES', 'TOUTES');
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>

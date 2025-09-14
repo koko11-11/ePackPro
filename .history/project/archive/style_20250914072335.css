@@ -1,0 +1,135 @@
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* شريط علوي */
+  header {
+    background-color: #4b6d6c; 
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 18px;
+  }
+
+  header .back-arrow {
+    cursor: pointer;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 22px;
+    user-select: none;
+  }
+
+  header .title {
+    flex-grow: 1;
+    font-weight: bold;
+  }
+
+  /* الجدول */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    border-bottom: 1px solid #ccc;
+  }
+
+  thead tr {
+    background: white;
+  }
+
+  thead th {
+    padding: 10px 8px;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: left;
+    color: #555;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #eee;
+  }
+
+  tbody td {
+    padding: 10px 8px;
+    font-size: 14px;
+    color: #444;
+  }
+
+  /* شريط الفلاتر السفلي */
+  footer {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 10px;
+    font-size: 12px;
+    color: #333;
+    user-select: none;
+  }
+
+  footer .filter-group {
+    text-align: center;
+  }
+
+  footer .filter-group span {
+    display: block;
+    margin-bottom: 4px;
+    color: #777;
+  }
+
+  footer .filter-group button {
+    border: none;
+    background: none;
+    color: #222;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+
+  footer .filter-group button:hover,
+  footer .filter-group button.active {
+    border-color: #222;
+  }
+
+  /* زر العين */
+  footer .eye-button {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid #222;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  footer .eye-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: #222;
+    stroke-width: 2;
+  }
+
+  footer .eye-label {
+    font-size: 10px;
+    margin-top: 3px;
+    color: #222;
+    user-select: none;
+  }
+
+  /* حاوية للجدول مع توسعة تلقائية */
+  .content {
+    flex-grow: 1;
+    overflow-y: auto;
+  }

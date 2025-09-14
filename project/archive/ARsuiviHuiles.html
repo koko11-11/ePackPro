@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Archives Suivi Huiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="back-arrow" onclick="history.back()">←</div>
+  <div class="title">ARCHIVES : SUIVI HUILES</div>
+</header>
+
+<div class="content">
+  <table>
+    <thead>
+      <tr>
+        <th>Poste huile</th>
+        <th>Date</th>
+
+        <th>Action</th>
+        <th>Note</th>
+        <th>Équipe</th>
+        <th>Signature</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      <tr>
+        <td>FRITEUSE POULET 1</td>
+        <td>jeu. 3 avr. 2025</td>
+        <td>JE CONTINUE, TESTEUR OK</td>
+        <td></td>
+        <td>EQUIPE</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <div class="filter-group">
+    <span>POSTE HUILE</span>
+    <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>CATÉGORIE</span>
+    <button class="active" onclick="filterToggle(this)">TOUTES ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>MOIS</span>
+    <button class="active" onclick="filterToggle(this)">avril 2025 ↓</button>
+  </div>
+  <div class="filter-group">
+    <span>JOUR</span>
+    <button class="active" onclick="filterToggle(this)">jeu. 3 avr. ↓</button>
+  </div>
+ <button class="filter-button" onclick="resetFilter()" title="Afficher tout"> TOUS</button>
+</footer>
+
+<script>
+  function filterToggle(button) {
+    if (button.classList.contains('active')) {
+
+      if (button.textContent.includes('TOUS') || button.textContent.includes('TOUTES')) {
+        button.textContent = button.textContent.replace('TOUS', 'SELECTION').replace('TOUTES', 'SÉLECTIONNÉES');
+      } else {
+        if (button.textContent.includes('SELECTION')) {
+          button.textContent = button.textContent.replace('SELECTION', 'TOUS').replace('SÉLECTIONNÉES', 'TOUTES');
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>

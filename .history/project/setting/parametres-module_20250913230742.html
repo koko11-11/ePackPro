@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres Modules</title>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #eaf0f8;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: #f8fcff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+h3 {
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: 1px solid #00a4b4;
+  background: white;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tab.active {
+  background: #e6f7f9;
+  border: 2px solid #00a4b4;
+  color: #00a4b4;
+}
+
+.tab:hover {
+  background: #f1f9fa;
+}
+
+.content {
+  padding: 20px;
+  background: #f0f5fa;
+  border-radius: 5px;
+  min-height: 200px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Toggle button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  margin-left: auto;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 24px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: .3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background-color: #00a4b4;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h3>PARAMÈTRES MODULES</h3>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('reception')">RÉCEPTION MARCHANDISES</button>
+      <button class="tab" onclick="showTab('huiles')">SUIVI HUILES</button>
+      <button class="tab" onclick="showTab('frigo')">TEMPÉRATURES FRIGO</button>
+      <button class="tab" onclick="showTab('etiquettes')">ÉTIQUETTES PRODUITS</button>
+      <button class="tab" onclick="showTab('nettoyages')">NETTOYAGES POSTES</button>
+      
+      <!-- Toggle -->
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="content">
+      <div id="reception" class="tab-content active">
+        <p>Peut éditer les éléments (Réception marchandises).</p>
+      </div>
+      <div id="huiles" class="tab-content">
+        <p>Peut éditer les éléments (Suivi huiles).</p>
+      </div>
+      <div id="frigo" class="tab-content">
+        <p>Peut éditer les éléments (Températures frigo).</p>
+      </div>
+      <div id="etiquettes" class="tab-content">
+        <p>Peut éditer les éléments (Étiquettes produits).</p>
+      </div>
+      <div id="nettoyages" class="tab-content">
+        <p>Peut éditer les éléments (Nettoyages postes).</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+  </script>
+</body>
+</html>

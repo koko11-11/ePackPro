@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Archives : ÉTIQUETTES PRODUITS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+     <div class="back-arrow" onclick="history.back()">←</div>
+  ARCHIVES : ÉTIQUETTES PRODUITS
+</header>
+ <div class="content">
+<table class="archives-table">
+  <thead>
+    <tr>
+      <th>Produit</th>
+      <th>Date de fabrication</th>
+      <th>DLC</th>
+      <th>Signature</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ven. 12 sept. 2025</td>
+      <td class="prod-name">CURRY</td>
+      <td>ven. 12 sept. 2025</td>
+      <td>lun. 15 sept. 2025</td>
+      <td>EQUIPE</td>
+      <td><span class="dots">&#8942;</span></td>
+    </tr>
+    <tr>
+      <td>ven. 12 sept. 2025</td>
+      <td class="prod-name">CHILI THAI</td>
+      <td>ven. 12 sept. 2025</td>
+      <td>lun. 15 sept. 2025</td>
+      <td>EQUIPE</td>
+      <td><span class="dots">&#8942;</span></td>
+    </tr>
+    <tr>
+      <td>ven. 12 sept. 2025</td>
+      <td class="prod-name">NAAN FROMAGE</td>
+      <td>ven. 12 sept. 2025</td>
+      <td>dim. 14 sept. 2025</td>
+      <td>EQUIPE</td>
+      <td><span class="dots">&#8942;</span></td>
+    </tr>
+    <tr>
+      <td>ven. 12 sept. 2025</td>
+      <td class="prod-name">LÉGUMES CRUS</td>
+      <td>ven. 12 sept. 2025</td>
+      <td>dim. 14 sept. 2025</td>
+      <td>EQUIPE</td>
+      <td><span class="dots">&#8942;</span></td>
+    </tr>
+    <tr>
+      <td>ven. 12 sept. 2025</td>
+      <td class="prod-name">SALADE</td>
+      <td>ven. 12 sept. 2025</td>
+      <td>dim. 14 sept. 2025</td>
+      <td>EQUIPE</td>
+      <td><span class="dots">&#8942;</span></td>
+    </tr>
+  </tbody>
+</table>
+ </div>
+ <footer>
+        <div class="filter-group">
+            <span>PRODUIT</span>
+            <button class="active" onclick="filterToggle(this)">TOUS ↓</button>
+        </div>
+
+        <div class="filter-group">
+            <span>MOIS</span>
+            <button class="active" onclick="filterToggle(this)">septembre 2025 ↓</button>
+        </div>
+        <div class="filter-group">
+            <span>JOUR</span>
+            <button class="active" onclick="filterToggle(this)">jeu. 11 sept. ↓</button>
+        </div>
+        <button class="filter-button" onclick="resetFilter()" title="Afficher tout"> TOUS</button>
+    </footer>
+    
+<script>
+
+  function filterToggle(button) {
+    if (button.classList.contains('active')) {
+ 
+      if (button.textContent.includes('TOUS') || button.textContent.includes('TOUTES')) {
+        button.textContent = button.textContent.replace('TOUS', 'SELECTION').replace('TOUTES', 'SÉLECTIONNÉES');
+      } else {
+        if (button.textContent.includes('SELECTION')) {
+          button.textContent = button.textContent.replace('SELECTION', 'TOUS').replace('SÉLECTIONNÉES', 'TOUTES');
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>
