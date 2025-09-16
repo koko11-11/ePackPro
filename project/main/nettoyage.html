@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NETTOYAGE POSTES</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Tabs */
+  .tabs {
+    margin: 1rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+  .tab-btn {
+    background: white;
+    border-radius: 4px;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+    color: #1c2938;
+    transition: background-color 0.3s ease;
+  }
+  .tab-btn.active {
+    box-shadow: none;
+    border-bottom: 3px solid #2c4a4a;
+    font-weight: 700;
+  }
+  .tab-btn:hover:not(.active) {
+    background-color: #f3f6fa;
+  }
+
+  /* Content sections (accordion style) */
+  section {
+    margin: 0 1rem 1.5rem;
+  }
+  .section-header {
+    background-color: #2c4a4a;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    user-select: none;
+  }
+  .section-header > .info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-header .count {
+    font-size: 0.9rem;
+    color: #d4d4d4;
+  }
+  .section-header .toggle-icon {
+    font-weight: 900;
+    font-size: 1.25rem;
+    user-select: none;
+  }
+  /* Cards container */
+  .cards-container {
+    background: white;
+    border-radius: 0 0 6px 6px;
+    padding: 0.8rem 1rem 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  /* Single Card */
+  .card {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    border-radius: 6px;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-header {
+    background-color: #dc3c3c; /* لون الهيدر الأحمر */
+    color: #fff;
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: center;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+</head>
+<body>
+   <header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+
+    <h1 class="page-title">NETTOYAGE POSTES</h1>
+  </header>
+<!-- Tabs -->
+<div class="tabs" role="tablist" aria-label="Zones">
+  <button class="tab-btn active" data-target="cuisine" role="tab" aria-selected="true" tabindex="0">CUISINE</button>
+  <button class="tab-btn" data-target="sous-sol" role="tab" aria-selected="false" tabindex="-1">LABORATOIRE</button>
+</div>
+
+<!-- Content Sections -->
+<main style="flex-grow:1; overflow-y: auto;">
+  <!-- استبدل محتوى قسم CUISINE بهذا -->
+<section id="cuisine" role="tabpanel" aria-labelledby="tab-cuisine">
+  <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="cuisine-cards" aria-label="Cuisine section, 8 éléments">
+    CUISINE
+    <div class="info">
+      <div class="count">8</div>
+      <div class="toggle-icon" aria-hidden="true">&#9650;</div>
+    </div>
+  </div>
+  <div class="cards-container" id="cuisine-cards">
+    
+    <article class="card" tabindex="0">
+      <div class="card-header">Plan de travail</div>
+      <div class="card-body">
+        <div class="status en-attente">En attente</div>
+        <div class="priority haute">Priorité haute</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Évier principal</div>
+      <div class="card-body">
+        <div class="status termine">Terminé</div>
+        <div class="priority normale">Priorité normale</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Four à convection</div>
+      <div class="card-body">
+        <div class="status en-cours">En cours</div>
+        <div class="priority haute">Priorité haute</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Friteuse</div>
+      <div class="card-body">
+        <div class="status en-attente">En attente</div>
+        <div class="priority normale">Priorité normale</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Plaque de cuisson</div>
+      <div class="card-body">
+        <div class="status termine">Terminé</div>
+        <div class="priority haute">Priorité haute</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Hotte aspirante</div>
+      <div class="card-body">
+        <div class="status en-cours">En cours</div>
+        <div class="priority normale">Priorité normale</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Réfrigérateur</div>
+      <div class="card-body">
+        <div class="status en-attente">En attente</div>
+        <div class="priority basse">Priorité basse</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Congélateur</div>
+      <div class="card-body">
+        <div class="status termine">Terminé</div>
+        <div class="priority basse">Priorité basse</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- استبدل محتوى قسم SOUS-SOL بهذا -->
+<section id="sous-sol" role="tabpanel" aria-labelledby="tab-sous-sol" hidden>
+  <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="sous-sol-cards" aria-label="Sous-Sol section, 5 éléments">
+    LABORATOIRE
+    <div class="info">
+      <div class="count">5</div>
+      <div class="toggle-icon" aria-hidden="true">&#9650;</div>
+    </div>
+  </div>
+  <div class="cards-container" id="sous-sol-cards">
+    
+    <article class="card" tabindex="0">
+      <div class="card-header">Chambre froide</div>
+      <div class="card-body">
+        <div class="status en-attente">En attente</div>
+        <div class="priority haute">Priorité haute</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Zone stockage</div>
+      <div class="card-body">
+        <div class="status en-cours">En cours</div>
+        <div class="priority normale">Priorité normale</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Local poubelle</div>
+      <div class="card-body">
+        <div class="status termine">Terminé</div>
+        <div class="priority haute">Priorité haute</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">LABORATOIRE</div>
+      <div class="card-body">
+        <div class="status en-attente">En attente</div>
+        <div class="priority normale">Priorité normale</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0">
+      <div class="card-header">Escaliers</div>
+      <div class="card-body">
+        <div class="status termine">Terminé</div>
+        <div class="priority basse">Priorité basse</div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+</main>
+
+<div class="bottom-bar">
+       <button id="btn-add" title="Ajouter un élément">+ Ajouter un élément</button>
+       <button id="btn-edit" title="Éditer un élément"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+      <div class="search-container">
+        <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" />
+      </div>
+      <button id="printBtn" title="Imprimer">Imprimer</button> <!-- Added Print Button -->
+      <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+    </div>
+
+<script>
+
+  backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+  // Tab switching
+  const tabs = document.querySelectorAll(".tab-btn");
+  const sections = document.querySelectorAll("main > section");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      // Set tab active state
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+        t.setAttribute("tabindex", "-1");
+      });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+      tab.setAttribute("tabindex", "0");
+
+      // Show content
+      const target = tab.getAttribute("data-target");
+      sections.forEach(section => {
+        if(section.id === target){
+          section.hidden = false;
+        } else {
+          section.hidden = true;
+        }
+      });
+    });
+  });
+
+  // Accordion toggle for sections
+  const sectionHeaders = document.querySelectorAll(".section-header");
+  sectionHeaders.forEach(header => {
+    header.addEventListener("click", () => {
+      const expanded = header.getAttribute("aria-expanded") === "true";
+      const cardsContainer = header.nextElementSibling;
+      if(expanded){
+        header.setAttribute("aria-expanded", "false");
+        header.querySelector(".toggle-icon").innerHTML = "&#9660;"; // Down arrow
+        cardsContainer.style.display = "none";
+      } else {
+        header.setAttribute("aria-expanded", "true");
+        header.querySelector(".toggle-icon").innerHTML = "&#9650;"; // Up arrow
+        cardsContainer.style.display = "grid"; // Or "block" depending on original layout
+      }
+    });
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+
+  // Search functionality
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", e => {
+    const query = e.target.value.trim().toLowerCase();
+    const visibleSection = Array.from(sections).find(section => !section.hidden);
+    if (!visibleSection) return;
+    const cards = visibleSection.querySelectorAll(".card");
+    cards.forEach(card => {
+      const title = card.querySelector(".card-header").textContent.toLowerCase();
+      card.style.display = title.includes(query) ? "flex" : "none";
+    });
+  });
+
+  // Add / Edit / Done buttons placeholder actions
+  document.getElementById("addBtn").addEventListener("click", () => {
+    alert("Ajouter un élément - Action simulée.");
+  });
+  document.getElementById("editBtn").addEventListener("click", () => {
+    alert("Éditer un élément - Action simulée.");
+  });
+  document.getElementById("doneBtn").addEventListener("click", () => {
+    alert("Action J'ai terminé - Simulation.");
+  });
+</script>
+</body>
+</html>

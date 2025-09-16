@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Liste des Contrôles</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* قائمة التحكم الرئيسية */
+    .control-list-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background-color: #f0f0f0;
+    }
+
+    .control-item {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .control-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* النافذة المنبثقة */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      z-index: 1000;
+      padding: 0;
+      display: none;
+    }
+    .modal[open] {
+      display: block;
+    }
+
+    .modal-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background-color: #4b6d6c;
+      border-bottom: 1px solid #e0e0e0;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .modal-section {
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .modal-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .moment-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .moment-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 8px;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .moment-option.selected {
+      background-color: #e6f7ff;
+      border-color: #4b6d6c;
+    }
+
+    .moment-option span {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .sun-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-12a.75.75 0 0 0 .75-.75V2a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zm0 15a.75.75 0 0 0-.75.75V22a.75.75 0 0 0 1.5 0v-2.25A.75.75 0 0 0 12 20zM4.222 5.222a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 0 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zm14.496 14.496a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 1 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zM2 12a.75.75 0 0 0 .75.75H5a.75.75 0 0 0 0-1.5H2.75A.75.75 0 0 0 2 12zm17 0a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zm-14.496 4.496a.75.75 0 0 0 0 1.06l1.5 1.5a.75.75 0 0 0 1.06-1.06l-1.5-1.5a.75.75 0 0 0-1.06 0zm14.496-14.496a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 1 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0z'/%3E%3C/svg%3E");
+    }
+
+    .moon-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M9.37 5.51A7.35 7.35 0 0 0 9.1 7.5c0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27A7.014 7.014 0 0 1 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49zM12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z'/%3E%3C/svg%3E");
+    }
+
+    .clock-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E");
+    }
+
+    .modal-options-section {
+      padding-bottom: 16px;
+    }
+
+    .options-row {
+      display: flex;
+      align-items: center;
+      background-color: #f8f8f8;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .option-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .option-item:hover {
+      background-color: #e8e8e8;
+    }
+
+    .option-text {
+      margin-left: 8px;
+      font-size: 14px;
+    }
+
+    .vertical-divider {
+      width: 1px;
+      height: 40px;
+      background-color: #ddd;
+    }
+
+    .calendar-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z'/%3E%3C/svg%3E");
+    }
+
+    .note-icon {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M14.59 2.59c-.38-.38-.89-.59-1.42-.59H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8.83c0-.53-.21-1.04-.59-1.41l-4.82-4.83zM15 18H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm0-4H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm-2-6V3.5L18.5 9H14c-.55 0-1-.45-1-1z'/%3E%3C/svg%3E");
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background-color: #f8f8f8;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .modal-cancel, .modal-confirm {
+      padding: 10px 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s;
+    }
+
+    .modal-cancel {
+      background-color: white;
+      color: #333;
+    }
+
+    .modal-confirm {
+      background-color: #4b6d6c;
+      color: white;
+      border-color: #4b6d6c;
+    }
+
+    .modal-cancel:hover {
+      background-color: #f0f0f0;
+    }
+
+    .modal-confirm:hover {
+      background-color: #3b5453;
+    }
+
+    /* تنسيقات للعناصر في القائمة الرئيسية */
+    .control-item:nth-child(1) {
+      grid-column: 1 / span 2;
+    }
+
+
+
+    .btn-terminer {
+      background-color: #4b6d6c !important;
+      color: white;
+      border: none !important;
+    }
+
+    .btn-terminer:not(:disabled):hover {
+      background-color: #4b6d6c !important;
+    }
+
+    .btn-terminer:disabled {
+      background-color: #ccc !important;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+    <h1 class="page-title">LISTE DES CONTRÔLES</h1>
+  </header>
+
+  <!-- Control list container -->
+  <main class="control-list-container">
+    <button class="control-item" data-control="climatisation">Contrôle<br />climatisation</button>
+    <button class="control-item" data-control="deratisation">Dératisation</button>
+    <button class="control-item" data-control="extincteurs">Extincteurs</button>
+    <button class="control-item" data-control="hotte">Hotte moteur</button>
+    <button class="control-item" data-control="visite">Visite<br />médicale</button>
+    <button class="control-item" data-control="electricite">Électricité</button>
+  </main>
+
+  <!-- Modal (hidden by default) -->
+  <dialog class="modal" id="controlModal">
+    <form method="dialog" class="modal-form">
+      <header class="modal-header">
+        <h2 id="modalTitle">CONTRÔLE CLIMATISATION</h2>
+        <button class="close-button" type="button" aria-label="Fermer la fenêtre modale">×</button>
+      </header>
+
+      <section class="modal-section">
+        <label class="modal-label">1. A QUEL MOMENT ?</label>
+        <div class="moment-options">
+          <button type="button" class="moment-option selected">
+            <div class="icon sun-icon" aria-hidden="true"></div>
+            <span>MATIN</span>
+          </button>
+          <button type="button" class="moment-option">
+            <div class="icon moon-icon" aria-hidden="true"></div>
+            <span>SOIR</span>
+          </button>
+          <button type="button" class="moment-option">
+            <div class="icon clock-icon" aria-hidden="true"></div>
+            <span>MAINTENANT</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="modal-section modal-options-section">
+        <label class="modal-label">2. OPTIONS</label>
+        <div class="options-row">
+          <button type="button" class="option-item">
+            <div class="icon calendar-icon" aria-hidden="true"></div>
+            <div class="option-text">Vendredi 12 septembre 2025</div>
+          </button>
+          <div class="vertical-divider" aria-hidden="true"></div>
+          <button type="button" class="option-item">
+            <div class="icon note-icon" aria-hidden="true"></div>
+            <div class="option-text">AJOUTER UNE NOTE / PHOTO</div>
+          </button>
+        </div>
+      </section>
+
+      <footer class="modal-footer">
+        <button type="button" class="modal-cancel">Annuler</button>
+        <button type="button" class="modal-confirm">Valider</button>
+      </footer>
+    </form>
+  </dialog>
+
+<div class="bottom-bar">
+       <button id="btn-add" title="Ajouter un élément">+ Ajouter un élément</button>
+       <button id="btn-edit" title="Éditer un élément"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+      <div class="search-container">
+        <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" />
+      </div>
+      <button id="printBtn" title="Imprimer">Imprimer</button> <!-- Added Print Button -->
+      <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+    </div>
+  <script>
+
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('controlModal');
+      const controlItems = document.querySelectorAll('.control-item');
+      const closeButton = modal.querySelector('.close-button');
+      const cancelButton = modal.querySelector('.modal-cancel');
+      const momentOptions = modal.querySelectorAll('.moment-option');
+      const modalTitle = document.getElementById('modalTitle');
+      
+      // فتح النافذة المنبثقة عند النقر على عنصر تحكم
+      controlItems.forEach(item => {
+        item.addEventListener('click', function() {
+          const controlType = this.getAttribute('data-control');
+          let title = "CONTRÔLE ";
+          
+          switch(controlType) {
+            case 'climatisation':
+              title += "CLIMATISATION";
+              break;
+            case 'deratisation':
+              title += "DÉRATISATION";
+              break;
+            case 'extincteurs':
+              title += "EXTINCTEURS";
+              break;
+            case 'hotte':
+              title += "HOTTE MOTEUR";
+              break;
+            case 'visite':
+              title += "VISITE MÉDICALE";
+              break;
+            case 'electricite':
+              title += "ÉLECTRICITÉ";
+              break;
+          }
+          
+          modalTitle.textContent = title;
+          modal.showModal();
+        });
+      });
+      
+      // إغلاق النافذة المنبثقة
+      function closeModal() {
+        modal.close();
+      }
+      
+      closeButton.addEventListener('click', closeModal);
+      cancelButton.addEventListener('click', closeModal);
+      
+      // إغلاق النافذة عند النقر خارجها
+      modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+      
+      // اختيار خيارات الوقت
+      momentOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          momentOptions.forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+      // زر الإضافة
+      document.getElementById('btn-add').addEventListener('click', function() {
+        alert('Ajouter un élément');
+      });
+      
+      // زر التعديل
+      document.getElementById('btn-edit').addEventListener('click', function() {
+        alert('Éditer un élément');
+      });
+      
+      // زر الطباعة
+      document.getElementById('printBtn').addEventListener('click', function() {
+        window.print();
+      });
+      
+      // زر البحث
+      document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+          alert('Recherche: ' + this.value);
+        }
+      });
+          const associerBtn = document.getElementById('associerBtn');
+
+    associerBtn.addEventListener('click', () => {
+      // عند الضغط على الزر، انتقل إلى الصفحة الثانية
+      window.location.href = '../../css/dashboard.html';
+    });
+      // زر التثبيت (تمكين/تعطيل)
+      const terminerBtn = document.getElementById('terminerBtn');
+      // مثال لتمكين الزر بعد إجراء معين
+      setTimeout(() => {
+        terminerBtn.disabled = false;
+      }, 3000);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Températures Frigo</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e4ebf5; /* light muted blue background */
+    color: #1c2938; /* text-foreground */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Tabs */
+  .tabs {
+    margin: 1rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+  .tab-btn {
+    background: white;
+    border-radius: 4px;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+    color: #1c2938;
+    transition: background-color 0.3s ease;
+  }
+  .tab-btn.active {
+    box-shadow: none;
+    border-bottom: 3px solid #2c4a4a;
+    font-weight: 700;
+  }
+  .tab-btn:hover:not(.active) {
+    background-color: #f3f6fa;
+  }
+
+  /* Content sections (accordion style) */
+  section {
+    margin: 0 1rem 1.5rem;
+  }
+  .section-header {
+    background-color: #2c4a4a;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    user-select: none;
+  }
+  .section-header > .info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-header .count {
+    font-size: 0.9rem;
+    color: #d4d4d4;
+  }
+  .section-header .toggle-icon {
+    font-weight: 900;
+    font-size: 1.25rem;
+    user-select: none;
+  }
+
+  /* Cards container */
+  .cards-container {
+    background: white;
+    border-radius: 0 0 6px 6px;
+    padding: 0.8rem 1rem 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  /* Single Card */
+  .card {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    border-radius: 6px;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-header {
+    background-color: #dc3c3c;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: center;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-image {
+    padding: 0.8rem;
+    display: flex;
+    justify-content: center;
+  }
+  .card-image img {
+    max-height: 90px;
+    object-fit: contain;
+  }
+
+
+  #doneBtn {
+    margin-left: auto;
+    background-color: #2c4a4a;
+    color: white;
+  }
+  #doneBtn:hover {
+    background-color: #214140;
+  }
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    .cards-container {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  }
+</style>
+</head>
+<body>
+<header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+    <h1 class="page-title"> TEMPÉRATURES FRIGO</h1>
+  </header>
+<!-- Tabs -->
+<div class="tabs" role="tablist" aria-label="Zones">
+  <button class="tab-btn active" data-target="cuisine" role="tab" aria-selected="true" tabindex="0">CUISINE</button>
+  <button class="tab-btn" data-target="sous-sol" role="tab" aria-selected="false" tabindex="-1">SOUS-SOL</button>
+</div>
+
+<!-- Content Sections -->
+<main style="flex-grow:1; overflow-y: auto;">
+
+  <!-- Cuisine Section -->
+  <section id="cuisine" role="tabpanel" aria-labelledby="tab-cuisine">
+    <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="cuisine-cards" aria-label="Cuisine section, 9 éléments">
+      CUISINE
+      <div class="info">
+        <div class="count">9</div>
+        <div class="toggle-icon" aria-hidden="true">&#9650;</div>
+      </div>
+    </div>
+    <div class="cards-container" id="cuisine-cards">
+      <article class="card" tabindex="0">
+        <div class="card-header">A-vitrine dessert</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=small-black-display-fridge-open-door" alt="Small black dessert display fridge with glass door front" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">B-vitrine boisson</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=double-door-glass-front-beverage-fridge" alt="Double door glass front beverage fridge with drinks inside" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">C-armoire frites</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=stainless-steel-two-door-restaurant-fridge" alt="Stainless steel two-door restaurant fridge for fries storage" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">D-auxiliaire neg</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=kitchen-stainless-steel-auxiliary-workstation" alt="Kitchen auxiliary stainless steel workstation" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">E-armoire marinad.</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=single-door-stainless-steel-fridge" alt="Single door stainless steel fridge for marinade storage" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">F-saladette 1</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=wide-view-of-saladette-display-cabinet" alt="Wide view of saladette display cabinet with compartments" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">G-saladette 2</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=wide-saladette-display-case-with-glass-top" alt="Wide saladette display case with glass top for salads" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">H-armoire marinad.</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=tall-single-door-stainless-steel-fridge" alt="Tall single door stainless steel fridge for marinade" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">I-armoire positive</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=two-door-stainless-steel-refrigerator" alt="Two door stainless steel positive temperature refrigerator" />
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Sous-Sol Section -->
+  <section id="sous-sol" role="tabpanel" aria-labelledby="tab-sous-sol" hidden>
+    <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="sous-sol-cards" aria-label="Sous-Sol section, 5 éléments">
+      SOUS-SOL
+      <div class="info">
+        <div class="count">5</div>
+        <div class="toggle-icon" aria-hidden="true">&#9650;</div>
+      </div>
+    </div>
+    <div class="cards-container" id="sous-sol-cards">
+      <article class="card" tabindex="0">
+        <div class="card-header">Cf bof</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=large-industrial-fridge-metal-door" alt="Large industrial fridge with metal door closed" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">Cf legumes</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=industrial-two-door-refrigerator" alt="Industrial two-door refrigerator for vegetables" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">Cf neg</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=walk-in-cold-room-door" alt="Walk-in cold room door industrial refrigeration" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">Cf neg fruits/legu...</div>
+        <div class="card-image">
+          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=large-refrigeration-door-for-fruits" alt="Large refrigeration cold room door for fruits and vegetables" />
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="card-header">Cf viandes</div>
+        <div class="card-image">
+          <img src="" alt="Industrial fridge door for meat storage" />
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+ <div class="bottom-bar">
+    <button id="ajouterBtn" class="btn-action" aria-haspopup="dialog" onclick="openAddModal()">+ Ajouter un élément</button>
+    <button id="editerBtn" class="btn-action" aria-disabled="false" onclick="openEditModal()"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+    <div class="search-container">
+      <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" oninput="searchElements()" />
+      <div class="search-icon"><i class="fas fa-search"></i></div>
+    </div>
+    <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+  </div>
+
+<script>
+
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+  // Tab switching
+  const tabs = document.querySelectorAll(".tab-btn");
+  const sections = document.querySelectorAll("main > section");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      // Set tab active state
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+        t.setAttribute("tabindex", "-1");
+      });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+      tab.setAttribute("tabindex", "0");
+
+      // Show content
+      const target = tab.getAttribute("data-target");
+      sections.forEach(section => {
+        if(section.id === target){
+          section.hidden = false;
+        } else {
+          section.hidden = true;
+        }
+      });
+    });
+  });
+
+  // Accordion toggle for sections
+  const sectionHeaders = document.querySelectorAll(".section-header");
+  sectionHeaders.forEach(header => {
+    header.addEventListener("click", () => {
+      const expanded = header.getAttribute("aria-expanded") === "true";
+      const cardsContainer = header.nextElementSibling;
+      if(expanded){
+        header.setAttribute("aria-expanded", "false");
+        header.querySelector(".toggle-icon").innerHTML = "&#9660;";
+        cardsContainer.style.display = "none";
+      } else {
+        header.setAttribute("aria-expanded", "true");
+        header.querySelector(".toggle-icon").innerHTML = "&#9650;";
+        cardsContainer.style.display = "grid";
+      }
+    });
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+
+  // Search functionality
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", e => {
+    const query = e.target.value.trim().toLowerCase();
+    const visibleSection = Array.from(sections).find(section => !section.hidden);
+    if (!visibleSection) return;
+    const cards = visibleSection.querySelectorAll(".card");
+    cards.forEach(card => {
+      const title = card.querySelector(".card-header").textContent.toLowerCase();
+      card.style.display = title.includes(query) ? "flex" : "none";
+    });
+  });
+
+
+  // Add / Edit / Done buttons placeholder actions
+  document.getElementById("addBtn").addEventListener("click", () => {
+    alert("Ajouter un élément - Action simulée.");
+  });
+  document.getElementById("editBtn").addEventListener("click", () => {
+    alert("Éditer un élément - Action simulée.");
+  });
+  document.getElementById("doneBtn").addEventListener("click", () => {
+    alert("Action J'ai terminé - Simulation.");
+  });
+
+
+</script>
+</body>
+</html>

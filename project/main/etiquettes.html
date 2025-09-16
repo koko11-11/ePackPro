@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <link rel="stylesheet" href="styles.css" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <title>Etiquettes Produits</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .tab {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    /* Tab content */
+    .tab-content {
+      background: white;
+      border-radius: 6px;
+      padding: 1rem;
+      min-height: 300px;
+
+    }
+    /* Grid items within tab */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .item-card {
+      background: #e5e7eb; /* muted bg */
+      border-radius: 6px;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+      transition: background-color 0.2s ease;
+    }
+    .item-card:hover {
+      background-color: #4b6d6c7e; /* lighter blue */
+    }
+    .item-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.25rem;
+    }
+    .item-days {
+      font-size: 0.8rem;
+      color: #6b7280; /* muted text */
+    }
+  
+    /* Popup overlay */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.4);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .popup-overlay.active {
+      display: flex;
+    }
+    /* Popup window */
+    .popup-window {
+      background: white;
+      border-radius: 8px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgb(0 0 0 / 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .popup-header {
+      background-color: #4b6d6c; /* dark green */
+      color: white;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .popup-close {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1;
+    }
+    /* Popup content */
+    .popup-content {
+      padding: 1rem;
+    }
+    /* Form inputs */
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      color: #4b6d6c;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: #4b6d6c;
+      box-shadow: 0 0 6px #4b6d6c;
+    }
+    /* DLC section */
+    .dlc-section {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .dlc-section input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .dlc-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+    }
+    .dlc-controls button {
+      background-color: #374151; /* gray-gray */
+      padding: 0.3rem 0.7rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+      border-radius: 4px;
+      box-shadow: none;
+      user-select: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+      line-height: 1;
+    }
+    .dlc-controls button:hover {
+      background-color: #1f2937;
+    }
+    .dlc-controls input[type="number"] {
+      width: 50px;
+      padding: 0.3rem 0.5rem;
+      font-size: 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 4px;
+      text-align: center;
+      user-select: none;
+    }
+    select.duration-select {
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      border: 1.5px solid #d1d5db;
+      cursor: pointer;
+    }
+    select.duration-select:focus {
+      outline: none;
+      border-color: #4b6d6c;
+      box-shadow: 0 0 6px #4b6d6c;
+    }
+    /* Bottom action buttons */
+    .popup-actions {
+      padding: 0.8rem 1rem;
+      background-color: #f9fafb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    .popup-actions button {
+      background-color: #4b6d6c;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 0.5rem 1.1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      user-select: none;
+      box-shadow: 0 2px 6px #4b6d6c;
+      transition: background-color 0.2s ease;
+    }
+    .popup-actions button.cancel-btn {
+      background-color: #ef4444; /* destructive red */
+      box-shadow: 0 2px 6px rgb(239 68 68 / 0.6);
+    }
+    .popup-actions button:hover {
+      filter: brightness(0.9);
+    }
+    .popup-actions button.cancel-btn:hover {
+      filter: brightness(0.8);
+    }
+
+    /* Calculator style */
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      user-select: none;
+    }
+    .calculator-display {
+      background: #f3f4f6;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 0.3rem 0.8rem;
+      font-size: 1.3rem;
+      text-align: right;
+      user-select: text;
+      color: #111827;
+      font-weight: 600;
+      min-height: 2.2rem;
+    }
+    .calculator-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .calc-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background-color: whitesmoke;
+      color: #4b6d6c;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 1px 3px #4b6d6c;
+      transition: background-color 0.2s ease;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .calc-btn:active {
+      background-color: #c7d2fe;
+    }
+    .calc-btn.action {
+      background-color: #4b6d6c;
+      color: white;
+    
+    }
+    .calc-btn.action:active {
+      background-color: #4b6d6c;
+    }
+    .calc-btn.operator {
+      background-color: #4b6d6c;
+      color: white;
+    }
+    .calc-btn.operator:active {
+      background-color: #bfdbfe;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      button {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+      }
+      .popup-window {
+        max-width: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+
+    <h1 class="page-title">Étiquettes Produits</h1>
+  </header>
+
+    <nav class="tabs" role="tablist" aria-label="Catégories">
+      <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-SANS" id="tabbtn-SANS" data-tab="SANS CATÉGORIE">SANS CATÉGORIE</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-DESSERT" id="tabbtn-DESSERT" data-tab="DESSERT">DESSERT</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-ENTAME" id="tabbtn-ENTAME" data-tab="ENTAMÉ/DÉCONGELÉ">ENTAMÉ/DÉCONGELÉ</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-FROMAGES" id="tabbtn-FROMAGES" data-tab="FROMAGES">FROMAGES</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-LEGUMES" id="tabbtn-LEGUMES" data-tab="LÉGUMES">LÉGUMES</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-PAIN" id="tabbtn-PAIN" data-tab="PAIN">PAIN</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-SAUCES" id="tabbtn-SAUCES" data-tab="SAUCES">SAUCES</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-STAFFCURRY" id="tabbtn-STAFFCURRY" data-tab="STAFF CURRY">STAFF CURRY</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-VIANDES" id="tabbtn-VIANDES" data-tab="VIANDES">VIANDES</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-VIANDESCORDON" id="tabbtn-VIANDESCORDON" data-tab="VIANDES CORDON">VIANDES CORDON</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-EPICES" id="tabbtn-EPICES" data-tab="ÉPICES">ÉPICES</button>
+    </nav>
+
+    <section id="tab-content-container" class="tab-content" tabindex="0" aria-live="polite" aria-label="Contenu du tab actif">
+      <!-- Content loaded dynamically -->
+    </section>
+
+    <div class="bottom-bar">
+       <button id="btn-add" title="Ajouter un élément">+ Ajouter un élément</button>
+       <button id="btn-edit" title="Éditer un élément"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+      <div class="search-container">
+        <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" />
+      </div>
+      <button id="printBtn" title="Imprimer">Imprimer</button> <!-- Added Print Button -->
+      <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+    </div>
+  </div>
+
+  <!-- Calculator Popup -->
+  <div class="popup-overlay" id="popup-calculator" role="dialog" aria-modal="true" aria-labelledby="calc-title" tabindex="-1">
+    <div class="popup-window" role="document">
+      <header class="popup-header">
+        <span id="calc-title">Impression</span>
+        <button class="popup-close" aria-label="Close Calculator popup" id="calc-close">&times;</button>
+      </header>
+      <section class="popup-content calculator" aria-describedby="calc-desc">
+        <div id="calc-desc" class="sr-only">Machine à calculer pour imprimer la quantité</div>
+        <div class="calculator-controls" aria-label="Contrôles principaux">
+          <button class="calc-btn operator" id="calc-decrement" aria-label="Décrémenter la valeur">−</button>
+          <div class="calculator-display" aria-live="polite" aria-atomic="true" aria-relevant="text" id="calc-display">0</div>
+          <button class="calc-btn operator" id="calc-increment" aria-label="Incrémenter la valeur">+</button>
+        </div>
+        <div class="calculator-controls" aria-label="Touches numériques">
+          <button class="calc-btn" data-num="1">1</button>
+          <button class="calc-btn" data-num="2">2</button>
+          <button class="calc-btn" data-num="3">3</button>
+        </div>
+        <div class="calculator-controls" aria-label="Touches numériques">
+          <button class="calc-btn" data-num="4">4</button>
+          <button class="calc-btn" data-num="5">5</button>
+          <button class="calc-btn" data-num="6">6</button>
+        </div>
+        <div class="calculator-controls" aria-label="Touches numériques">
+          <button class="calc-btn" data-num="7">7</button>
+          <button class="calc-btn" data-num="8">8</button>
+          <button class="calc-btn" data-num="9">9</button>
+        </div>
+        <div class="calculator-controls" aria-label="Touches numériques additionnelles">
+          <button class="calc-btn action" id="calc-clear">C</button>
+          <button class="calc-btn" data-num="0">0</button>
+          <button class="calc-btn action" id="calc-del">Del</button>
+        </div>
+        <div style="margin-top: 1rem; display:flex; justify-content: space-between;">
+          <button id="calc-cancel" class="popup-actions cancel-btn" aria-label="Annuler la saisie">Annuler</button>
+          <button id="calc-validate" class="popup-actions" aria-label="Valider la saisie">Valider</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Edit Popup -->
+  <div class="popup-overlay" id="popup-edit" role="dialog" aria-modal="true" aria-labelledby="edit-title" tabindex="-1">
+    <div class="popup-window" role="document">
+      <header class="popup-header">
+        <span id="edit-title">Éditer un élément</span>
+        <button class="popup-close" aria-label="Close Edit popup" id="edit-close">&times;</button>
+      </header>
+      <section class="popup-content">
+        <form id="edit-form">
+          <label for="edit-name">Nom de l'élément</label>
+          <input type="text" id="edit-name" maxlength="255" required value="ARRIVAGE ESCALOPE ASWAK SALAM" />
+
+          <label for="edit-category">Catégories</label>
+          <select id="edit-category" required>
+            <option>SANS CATÉGORIE</option>
+            <option>DESSERT</option>
+            <option>ENTAMÉ/DÉCONGELÉ</option>
+            <option>FROMAGES</option>
+            <option>LÉGUMES</option>
+            <option>PAIN</option>
+            <option>SAUCES</option>
+            <option>STAFF CURRY</option>
+            <option>VIANDES</option>
+            <option>VIANDES CORDON</option>
+            <option>ÉPICES</option>
+          </select>
+
+          <div class="dlc-section">
+            <input type="checkbox" id="edit-dlc" checked/>
+            <label for="edit-dlc" style="margin:0;">DLC</label>
+          </div>
+          <div class="dlc-controls">
+            <button type="button" aria-label="Décrémenter DLC" id="dlc-decrement">−</button>
+            <input type="number" id="dlc-number" min="0" max="365" value="3" aria-label="Nombre de jours DLC" />
+            <button type="button" aria-label="Incrémenter DLC" id="dlc-increment">+</button>
+            <select id="dlc-duration" class="duration-select" aria-label="Unité de durée">
+              <option>Jour(s)</option>
+              <option>Semaine(s)</option>
+              <option>Mois</option>
+            </select>
+          </div>
+
+          <div class="popup-actions" style="margin-top: 1.25rem;">
+            <button type="button" class="cancel-btn" id="edit-delete">Supprimer</button> <!-- Added Delete Button -->
+            <button type="button" class="cancel-btn" id="edit-cancel">Annuler</button>
+            <button type="submit" id="edit-validate">Valider</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <!-- Add Popup (new element) -->
+  <div class="popup-overlay" id="popup-add" role="dialog" aria-modal="true" aria-labelledby="add-title" tabindex="-1">
+    <div class="popup-window" role="document">
+      <header class="popup-header">
+        <span id="add-title">Ajouter un élément</span>
+        <button class="popup-close" aria-label="Close Add popup" id="add-close">&times;</button>
+      </header>
+      <section class="popup-content">
+        <form id="add-form">
+          <label for="add-name">Nom de l'élément</label>
+          <input type="text" id="add-name" maxlength="255" required placeholder="Nom de l'élément" />
+
+          <label for="add-category">Catégories</label>
+          <select id="add-category" required>
+            <option>SANS CATÉGORIE</option>
+            <option>DESSERT</option>
+            <option>ENTAMÉ/DÉCONGELÉ</option>
+            <option>FROMAGES</option>
+            <option>LÉGUMES</option>
+            <option>PAIN</option>
+            <option>SAUCES</option>
+            <option>STAFF CURRY</option>
+            <option>VIANDES</option>
+            <option>VIANDES CORDON</option>
+            <option>ÉPICES</option>
+          </select>
+
+          <div class="dlc-section">
+            <input type="checkbox" id="add-dlc" />
+            <label for="add-dlc" style="margin:0;">DLC</label>
+          </div>
+          <div class="dlc-controls">
+            <button type="button" aria-label="Décrémenter DLC" id="add-dlc-decrement">−</button>
+            <input type="number" id="add-dlc-number" min="0" max="365" value="3" aria-label="Nombre de jours DLC" />
+            <button type="button" aria-label="Incrémenter DLC" id="add-dlc-increment">+</button>
+            <select id="add-dlc-duration" class="duration-select" aria-label="Unité de durée">
+              <option>Jour(s)</option>
+              <option>Semaine(s)</option>
+              <option>Mois</option>
+            </select>
+          </div>
+
+          <div class="popup-actions" style="margin-top: 1.25rem;">
+            <button type="button" class="cancel-btn" id="add-cancel">Annuler</button>
+            <button type="submit" id="add-validate">Valider</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script>
+
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+    (() => {
+      // Sample data for items per category (keys match tabs)
+      const data = {
+        "SANS CATÉGORIE": [
+          { name: "Arrivage escalope aswak salam", days: 3 },
+          { name: "Avr", days: 1 },
+          { name: "Bacon", days: 3 },
+          { name: "Chef sudan", days: 0 },
+          { name: "Chicken crousty", days: 2 },
+          { name: "Coulis fruitz rouges", days: 15 },
+          { name: "Couteau filet de poulet", days: 0 },
+          { name: "Couteau salade", days: 0 },
+          { name: "Couteau wings", days: 0 },
+          { name: "Crouton", days: 15 },
+          { name: "Diplomate fraise", days: 4 },
+          { name: "Diplomzte fraise", days: 4 },
+          { name: "Eat saucé", days: 0 },
+          { name: "Perso", days: 0 },
+          { name: "Poivre noir", days: 20 },
+          { name: "Tacdia", days: 29 },
+          { name: "Vacen", days: 2 },
+          { name: "Wings achahada", days: 2 },
+        ],
+        "DESSERT": [
+          { name: "Tarte aux pommes", days: 5 },
+          { name: "Mousse chocolat", days: 3 },
+          { name: "Crème brûlée", days: 7 },
+        ],
+        "ENTAMÉ/DÉCONGELÉ": [
+          { name: "Viande décongelée", days: 2 },
+          { name: "Poisson frais", days: 1 },
+        ],
+        "FROMAGES": [
+          { name: "Camembert", days: 14 },
+          { name: "Brie", days: 10 },
+        ],
+        "LÉGUMES": [
+          { name: "Tomates", days: 7 },
+          { name: "Carottes", days: 14 },
+        ],
+        "PAIN": [
+          { name: "Baguette", days: 2 },
+          { name: "Pain complet", days: 5 },
+        ],
+        "SAUCES": [
+          { name: "Mayonnaise", days: 30 },
+          { name: "Ketchup", days: 60 },
+        ],
+        "STAFF CURRY": [
+          { name: "Curry doux", days: 365 },
+          { name: "Curry fort", days: 365 },
+        ],
+        "VIANDES": [
+          { name: "Steak", days: 5 },
+          { name: "Poulet", days: 7 },
+        ],
+        "VIANDES CORDON": [
+          { name: "Cordon bleu", days: 10 },
+          { name: "Cordon steak", days: 15 },
+        ],
+        "ÉPICES": [
+          { name: "Sel", days: 730 },
+          { name: "Poivre", days: 365 },
+        ],
+      };
+
+      // Elements
+      const tabs = document.querySelectorAll('.tab');
+      const contentContainer = document.getElementById('tab-content-container');
+      const popupCalculator = document.getElementById('popup-calculator');
+      const popupEdit = document.getElementById('popup-edit');
+      const popupAdd = document.getElementById('popup-add');
+      const btnAdd = document.getElementById('btn-add');
+      const btnEdit = document.getElementById('btn-edit');
+      const printBtn = document.getElementById('printBtn'); // Get the new print button
+
+      let activeTab = "SANS CATÉGORIE";
+
+      // Calculator state
+      let calcValue = 0;
+      let calcTargetItem = null; // The clicked item to edit quantity (for demo only)
+
+      // Render items for active tab
+      function renderItems(tab) {
+        contentContainer.innerHTML = '';
+        const items = data[tab];
+        if (!items || items.length === 0) {
+          contentContainer.innerHTML = '<p>Aucun élément dans cette catégorie.</p>';
+          return;
+        }
+        let grid = document.createElement('div');
+        grid.className = 'items-grid';
+        // For accessibility: add role grid or list if needed
+        items.forEach((item, idx) => {
+          let card = document.createElement('div');
+          card.className = 'item-card';
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-pressed', 'false');
+          card.setAttribute('aria-label', `${item.name}, durée de ${item.days} jour(s)`);
+          card.dataset.idx = String(idx);
+
+          let nameEl = document.createElement('div');
+          nameEl.className = 'item-name';
+          nameEl.textContent = item.name;
+
+          let daysEl = document.createElement('div');
+          daysEl.className = 'item-days';
+          daysEl.textContent = item.days > 0 ? `(${item.days} jour${item.days > 1 ? 's' : ''})` : '';
+
+          let circleEl = document.createElement('div');
+          circleEl.style.marginTop = '0.2rem';
+          circleEl.style.fontSize = '1.3rem';
+          circleEl.textContent = '⃝'; // just a circle unicode
+
+          card.appendChild(nameEl);
+          card.appendChild(daysEl);
+          card.appendChild(circleEl);
+
+          card.addEventListener('click', () => {
+            openCalculator(item, card);
+          });
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openCalculator(item, card);
+            }
+          });
+          grid.appendChild(card);
+        });
+        contentContainer.appendChild(grid);
+      }
+
+      // Switch active tab
+      function activateTab(tabName) {
+        activeTab = tabName;
+        tabs.forEach(tab => {
+          const isActive = tab.dataset.tab === tabName;
+          tab.classList.toggle('active', isActive);
+          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          if (isActive) tab.focus();
+        });
+        renderItems(tabName);
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          activateTab(tab.dataset.tab);
+        });
+      });
+
+      // Open calculator popup with selected item
+      function openCalculator(item, cardEl) {
+        calcValue = 0; // reset or could load item qty if saved
+        calcTargetItem = item;
+        updateCalcDisplay();
+        popupCalculator.classList.add('active');
+        popupCalculator.focus();
+
+        // Accessibility: save last focused element so we can return later
+        lastFocus = cardEl;
+      }
+      function closeCalculator() {
+        popupCalculator.classList.remove('active');
+        if (lastFocus) lastFocus.focus();
+      }
+      // Calculator display update
+      function updateCalcDisplay() {
+        const display = document.getElementById('calc-display');
+        display.textContent = calcValue.toString();
+      }
+
+      // Calculator controls
+      document.getElementById('calc-increment').addEventListener('click', () => {
+        calcValue++;
+        updateCalcDisplay();
+      });
+      document.getElementById('calc-decrement').addEventListener('click', () => {
+        if (calcValue > 0) {
+          calcValue--;
+          updateCalcDisplay();
+        }
+      });
+      document.getElementById('calc-clear').addEventListener('click', () => {
+        calcValue = 0;
+        updateCalcDisplay();
+      });
+      document.getElementById('calc-del').addEventListener('click', () => {
+        // Delete last digit (as string)
+        let s = calcValue.toString();
+        s = s.length > 1 ? s.slice(0, -1) : '0';
+        calcValue = parseInt(s, 10);
+        updateCalcDisplay();
+      });
+      document.querySelectorAll('.calc-btn[data-num]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          let digit = btn.dataset.num;
+          if (digit !== undefined) {
+            // Append digit avoiding leading zero
+            if (calcValue === 0) calcValue = parseInt(digit, 10);
+            else calcValue = parseInt(calcValue.toString() + digit, 10);
+            updateCalcDisplay();
+          }
+        });
+      });
+      document.getElementById('calc-cancel').addEventListener('click', () => {
+        closeCalculator();
+      });
+      document.getElementById('calc-close').addEventListener('click', () => {
+        closeCalculator();
+      });
+      document.getElementById('calc-validate').addEventListener('click', () => {
+        alert(`Valeur validée: ${calcValue} pour l'élément "${calcTargetItem.name}"`);
+        closeCalculator();
+      });
+
+      // Manage Edit popup
+      btnEdit.addEventListener('click', () => {
+        popupEdit.classList.add('active');
+        popupEdit.focus();
+      });
+      document.getElementById('edit-close').addEventListener('click', () => {
+        popupEdit.classList.remove('active');
+      });
+      document.getElementById('edit-cancel').addEventListener('click', () => {
+        popupEdit.classList.remove('active');
+      });
+      document.getElementById('edit-delete').addEventListener('click', () => { // Added event listener for delete button
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+          alert("Élément supprimé (fonctionnalité de suppression réelle à implémenter).");
+          popupEdit.classList.remove('active');
+          // Here you would add logic to actually delete the item from your 'data' object
+          // and then re-render the items for the active tab.
+        }
+      });
+      document.getElementById('edit-form').addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Modifications validées.');
+        popupEdit.classList.remove('active');
+      });
+      // DLC controls for Edit
+      const dlcDecrement = document.getElementById('dlc-decrement');
+      const dlcIncrement = document.getElementById('dlc-increment');
+      const dlcNumber = document.getElementById('dlc-number');
+      dlcDecrement.addEventListener('click', () => {
+        let val = parseInt(dlcNumber.value) || 0;
+        if (val > 0) dlcNumber.value = val - 1;
+      });
+      dlcIncrement.addEventListener('click', () => {
+        let val = parseInt(dlcNumber.value) || 0;
+        if (val < 365) dlcNumber.value = val + 1;
+      });
+
+      // Manage Add popup
+      btnAdd.addEventListener('click', () => {
+        popupAdd.classList.add('active');
+        popupAdd.focus();
+      });
+      document.getElementById('add-close').addEventListener('click', () => {
+        popupAdd.classList.remove('active');
+      });
+      document.getElementById('add-cancel').addEventListener('click', () => {
+        popupAdd.classList.remove('active');
+      });
+      document.getElementById('add-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const nameInput = document.getElementById('add-name');
+        const categoryInput = document.getElementById('add-category');
+        const dlcCheckbox = document.getElementById('add-dlc');
+        const dlcNum = document.getElementById('add-dlc-number');
+        const dlcDuration = document.getElementById('add-dlc-duration');
+
+        if (!nameInput.value.trim()) {
+          alert("Le nom de l'élément est obligatoire.");
+          return;
+        }
+        // Add new item to data
+        const category = categoryInput.value;
+        if (!data[category]) {
+          data[category] = [];
+        }
+        const days = dlcCheckbox.checked ? parseInt(dlcNum.value) || 0 : 0;
+        data[category].push({ name: nameInput.value.trim(), days });
+
+        alert('Élément ajouté.');
+        popupAdd.classList.remove('active');
+        if (category === activeTab) renderItems(activeTab); // refresh if same tab
+      });
+      // DLC controls for Add
+      document.getElementById('add-dlc-decrement').addEventListener('click', () => {
+        let val = parseInt(document.getElementById('add-dlc-number').value) || 0;
+        if (val > 0) document.getElementById('add-dlc-number').value = val - 1;
+      });
+      document.getElementById('add-dlc-increment').addEventListener('click', () => {
+        let val = parseInt(document.getElementById('add-dlc-number').value) || 0;
+        if (val < 365) document.getElementById('add-dlc-number').value = val + 1;
+      });
+
+      // Print button functionality
+      printBtn.addEventListener('click', () => {
+        alert("Fonctionnalité d'impression à implémenter.");
+        // Here you would add logic to trigger a print action,
+        // e.g., window.print() or generate a printable report.
+      });
+
+      // Initialize
+      activateTab(activeTab);
+
+      // Accessibility: trap focus in popups when opened and close on ESC
+      let lastFocus = null;
+      function trapFocus(element) {
+        const focusable = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        element.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+              }
+            } else {
+              if (document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+              }
+            }
+          } else if (e.key === "Escape") {
+            // Close any popup open
+            if (popupCalculator.classList.contains('active')) closeCalculator();
+            if (popupEdit.classList.contains('active')) popupEdit.classList.remove('active');
+            if (popupAdd.classList.contains('active')) popupAdd.classList.remove('active');
+          }
+        });
+        // Focus first element by default on popup open
+        first.focus();
+      }
+
+      [popupCalculator, popupEdit, popupAdd].forEach(popup => {
+        popup.addEventListener('transitionstart', () => {
+          if (popup.classList.contains('active')) trapFocus(popup);
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Réception Marchandises</title>
+  <link rel="stylesheet" href="styles.css" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+  <!-- RÉCEPTION MARCHANDISES PAGE -->
+  <header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+    <h1 class="page-title">RÉCEPTION MARCHANDISES</h1>
+    <button id="choixFournisseurBtn" class="btn-fournisseur" aria-haspopup="dialog" aria-expanded="false">
+      choix du fournisseur
+    </button>
+  </header>
+
+  <main class="main-content">
+    <section class="categories-grid" role="list" aria-label="Liste des catégories">
+      <div tabindex="0" role="listitem" class="category-card selected" data-name="Divers frais" aria-selected="true">Divers frais</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Escalope de poulet">Escalope de poulet</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Pain">Pain</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Poisson">Poisson</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Sauce">Sauce</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Surgelé">Surgelé</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Viande">Viande</div>
+      <div tabindex="0" role="listitem" class="category-card" data-name="Wings">Wings</div>
+    </section>
+
+    <div class="bottom-bar">
+      <button id="ajouterBtn" class="btn-action" aria-haspopup="dialog">+ Ajouter un élément</button>
+      <button id="editerBtn" class="btn-action" aria-disabled="false"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+
+      <div class="search-container">
+        <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" />
+       
+      </div>
+      <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+    </div>
+  </main>
+
+  <!-- POPUPS / MODALS -->
+
+  <!-- Choix du fournisseur popup -->
+  <div id="popupFournisseur" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupFournisseurTitle" hidden>
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2 id="popupFournisseurTitle" class="modal-title">choix du fournisseur</h2>
+        <button class="modal-close" aria-label="Fermer la fenêtre fournisseur">&times;</button>
+      </header>
+      <section class="fournisseur-grid" role="list" aria-label="Liste des fournisseurs">
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="ISLA FOOD">ISLA FOOD</div>
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="MAKLA CENTER">MAKLA CENTER</div>
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="FRUIT ET LEGUMES">FRUIT ET LEGUMES</div>
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="KHADISPAL">KHADISPAL</div>
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="DÉLICES ET SAVEUR">DÉLICES ET SAVEUR</div>
+        <div role="listitem" tabindex="0" class="fournisseur-card" data-name="MALIK VOLAILLE">MALIK VOLAILLE</div>
+      </section>
+      <footer class="modal-footer">
+        <button id="annulerFournisseurBtn" class="btn-cancel">✘ Annuler</button>
+        <button id="validerFournisseurBtn" class="btn-validate" disabled>✔ Valider</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Information popup -->
+  <div id="popupInformation" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="popupInfoTitle" hidden>
+    <div class="modal-content small">
+      <header class="modal-header">
+        <h2 id="popupInfoTitle" class="modal-title">Information</h2>
+        <button class="modal-close" aria-label="Fermer la fenêtre information">&times;</button>
+      </header>
+      <p class="info-text">veuillez sélectionner un fournisseur</p>
+      <footer class="modal-footer">
+        <button id="validerInfoBtn" class="btn-validate">✔ Valider</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Ajouter un élément popup -->
+  <div id="popupAjouter" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupAjouterTitle" hidden>
+
+    <div class="modal-content form-modal">
+      <header class="modal-header">
+        <h2 id="popupAjouterTitle" class="modal-title">Ajouter un élément</h2>
+        <button class="modal-close" aria-label="Fermer la fenêtre ajouter">&times;</button>
+      </header>
+      <form id="formAjouter" autocomplete="off">
+        <label for="nomElementAjouter" class="form-label">Nom de l'élément</label>
+        <input type="text" id="nomElementAjouter" maxlength="255" placeholder=" " class="form-input" aria-describedby="compteurAjouter" required/>
+        <div class="char-count" id="compteurAjouter">0/255</div>
+
+        <label for="categorieSelectAjouter" class="form-label">Catégories</label>
+        <div class="categorie-select-container">
+          <select id="categorieSelectAjouter" class="form-select"></select>
+          <button type="button" id="btnAddCategorieAjouter" class="btn-plus" aria-label="Ajouter catégorie"></button>
+        </div>
+
+        <fieldset class="temperature-group" aria-describedby="tempDescAjouter">
+          <legend>Températures</legend>
+          <p id="tempDescAjouter" class="sr-only">Indiquer minimun, maximum et limite en degrés Celsius</p>
+          <div class="temp-row">
+            <label for="tempMinAjouter" class="temp-label">Min</label>
+            <input type="number" id="tempMinAjouter" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+
+
+          </div>
+          <div class="temp-row">
+            <label for="tempMaxAjouter" class="temp-label">Max</label>
+            <input type="number" id="tempMaxAjouter" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+
+
+          </div>
+          <div class="temp-row">
+            <label for="tempLimiteAjouter" class="temp-label">Limite</label>
+            <input type="number" id="tempLimiteAjouter" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+
+          </div>
+        </fieldset>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="checklistAjouter" />
+          <label for="checklistAjouter">Checklist</label>
+        </div>
+
+        <label for="categorieReceptionAjouter" class="form-label">Réception</label>
+        <select id="categorieReceptionAjouter" class="form-select">
+          <option value="PRODUIT RECEPTION" selected>PRODUIT RECEPTION</option>
+        </select>
+
+        <footer class="modal-footer">
+          <button type="button" id="annulerAjouterBtn" class="btn-cancel">✘ Annuler</button>
+          <button type="submit" id="validerAjouterBtn" class="btn-validate">✔ Valider</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- Éditer un élément popup -->
+  <div id="popupEditer" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupEditerTitle" hidden>
+    <div class="modal-content form-modal">
+      <header class="modal-header">
+        <h2 id="popupEditerTitle" class="modal-title">Éditer un élément</h2>
+        <button class="modal-close" aria-label="Fermer la fenêtre éditer">&times;</button>
+      </header>
+      <form id="formEditer" autocomplete="off">
+        <label for="nomElementEditer" class="form-label">Nom de l'élément</label>
+        <input type="text" id="nomElementEditer" maxlength="255" placeholder=" " class="form-input" aria-describedby="compteurEditer" required/>
+        <div class="char-count" id="compteurEditer">0/255</div>
+
+        <label for="categorieSelectEditer" class="form-label">Catégories</label>
+        <div class="categorie-select-container">
+          <select id="categorieSelectEditer" class="form-select"></select>
+          <button type="button" id="btnAddCategorieEditer" class="btn-plus" aria-label="Ajouter catégorie"></button>
+        </div>
+
+        <fieldset class="temperature-group" aria-describedby="tempDescEditer">
+          <legend>Températures</legend>
+          <p id="tempDescEditer" class="sr-only">Indiquer minimun, maximum et limite en degrés Celsius</p>
+          <div class="temp-row">
+            <label for="tempMinEditer" class="temp-label">Min</label>
+            <input type="number" id="tempMinEditer" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+
+
+
+          </div>
+          <div class="temp-row">
+            <label for="tempMaxEditer" class="temp-label">Max</label>
+            <input type="number" id="tempMaxEditer" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+
+
+
+          </div>
+          <div class="temp-row">
+            <label for="tempLimiteEditer" class="temp-label">Limite</label>
+            <input type="number" id="tempLimiteEditer" class="temp-input" step="0.001" min="-100" max="100" value="0.000" /> °C
+          </div>
+        </fieldset>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="checklistEditer" />
+          <label for="checklistEditer">Checklist</label>
+        </div>
+
+        <label for="categorieReceptionEditer" class="form-label">Réception</label>
+        <select id="categorieReceptionEditer" class="form-select">
+          <option value="PRODUIT RECEPTION" selected>PRODUIT RECEPTION</option>
+        </select>
+
+        <footer class="modal-footer">
+          <button type="button" id="annulerEditerBtn" class="btn-cancel">✘ Annuler</button>
+          <button type="submit" id="validerEditerBtn" class="btn-validate">✔ Valider</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      // Elements
+      const choixFournisseurBtn = document.getElementById("choixFournisseurBtn");
+      const popupFournisseur = document.getElementById("popupFournisseur");
+      const popupInformation = document.getElementById("popupInformation");
+      const popupAjouter = document.getElementById("popupAjouter");
+      const popupEditer = document.getElementById("popupEditer");
+
+      const modalCloses = document.querySelectorAll(".modal-close");
+      const btnValiderFournisseur = document.getElementById("validerFournisseurBtn");
+      const btnAnnulerFournisseur = document.getElementById("annulerFournisseurBtn");
+      const btnValiderInfo = document.getElementById("validerInfoBtn");
+      const btnAjouter = document.getElementById("ajouterBtn");
+      const btnEditer = document.getElementById("editerBtn");
+      const btnAnnulerAjouter = document.getElementById("annulerAjouterBtn");
+      const btnAnnulerEditer = document.getElementById("annulerEditerBtn");
+
+      const searchInput = document.getElementById("searchInput");
+      const terminerBtn = document.getElementById("terminerBtn");
+
+      const categoriesGrid = document.querySelector(".categories-grid");
+      const fournisseurCards = popupFournisseur.querySelectorAll(".fournisseur-card");
+
+      // Popups forms inputs
+      const formAjouter = document.getElementById("formAjouter");
+      const nomElementAjouter = document.getElementById("nomElementAjouter");
+      const compteurAjouter = document.getElementById("compteurAjouter");
+      const categorieSelectAjouter = document.getElementById("categorieSelectAjouter");
+      const checkListAjouter = document.getElementById("checklistAjouter");
+      // temps values ajouter
+      const tempMinAjouter = document.getElementById("tempMinAjouter");
+      const tempMaxAjouter = document.getElementById("tempMaxAjouter");
+      const tempLimiteAjouter = document.getElementById("tempLimiteAjouter");
+
+      // forms editer
+      const formEditer = document.getElementById("formEditer");
+      const nomElementEditer = document.getElementById("nomElementEditer");
+      const compteurEditer = document.getElementById("compteurEditer");
+      const categorieSelectEditer = document.getElementById("categorieSelectEditer");
+      const checkListEditer = document.getElementById("checklistEditer");
+      // temps values editer
+      const tempMinEditer = document.getElementById("tempMinEditer");
+      const tempMaxEditer = document.getElementById("tempMaxEditer");
+      const tempLimiteEditer = document.getElementById("tempLimiteEditer");
+
+      // Data state
+      let selectedCategoryName = "Divers frais";
+      let selectedFournisseurName = null;
+      let editingCategoryIndex = -1;
+
+      // Static categories list (for selects)
+      const allCategories = ["Catégorie 1", "Catégorie 2", "Catégorie 3", "Catégorie 4"];
+
+      // Load category options into selects
+      function fillCategorieSelect(selectElem) {
+        selectElem.innerHTML = "";
+        allCategories.forEach(cat => {
+          const opt = document.createElement("option");
+          opt.value = cat;
+          opt.textContent = cat;
+          selectElem.appendChild(opt);
+        });
+      }
+      fillCategorieSelect(categorieSelectAjouter);
+      fillCategorieSelect(categorieSelectEditer);
+
+      // --- FUNCTIONS ---
+
+      // Utility: toggle modal display
+      function showModal(modal) {
+        modal.removeAttribute("hidden");
+        modal.querySelector(".modal-content").focus();
+        document.body.style.overflow = "hidden";
+      }
+      function hideModal(modal) {
+        modal.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+      }
+
+      // Set selected category card in Reception page
+      function selectCategory(name) {
+        selectedCategoryName = name;
+        categoriesGrid.querySelectorAll(".category-card").forEach(card => {
+          card.classList.toggle("selected", card.dataset.name === name);
+          card.setAttribute("aria-selected", card.dataset.name === name ? "true" : "false");
+          if(card.dataset.name === name) card.focus();
+        });
+      }
+
+      // Filter category cards on search
+      function filterCategories(searchTerm) {
+        categoriesGrid.querySelectorAll(".category-card").forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(searchTerm.toLowerCase()) ? "" : "none";
+        });
+      }
+
+      // Validate if editing enabled button "Éditer un élément"
+      function updateEditButtonState() {
+        btnEditer.disabled = !selectedCategoryName || !categoriesGrid.querySelector(".category-card.selected");
+        btnEditer.setAttribute("aria-disabled", btnEditer.disabled.toString());
+      }
+
+      // Reset and fill form fields (Ajouter or Editer)
+      function resetFormAjout() {
+        nomElementAjouter.value = "";
+        compteurAjouter.textContent = "0/255";
+        categorieSelectAjouter.selectedIndex = 0;
+        tempMinAjouter.value = "0.000";
+        tempMaxAjouter.value = "0.000";
+        tempLimiteAjouter.value = "0.000";
+        checkListAjouter.checked = false;
+      }
+      function fillFormEditer(data) {
+        nomElementEditer.value = data.nom;
+        compteurEditer.textContent = data.nom.length + "/255";
+        categorieSelectEditer.value = data.categorie || allCategories[0];
+        tempMinEditer.value = data.tempMin || "0.000";
+        tempMaxEditer.value = data.tempMax || "0.000";
+        tempLimiteEditer.value = data.tempLimite || "0.000";
+        checkListEditer.checked = data.checklist || false;
+      }
+
+      // --- EVENT LISTENERS ---
+
+      // Selection of category cards
+      categoriesGrid.querySelectorAll(".category-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectCategory(card.dataset.name);
+          updateEditButtonState();
+        });
+        card.addEventListener("keydown", e => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            selectCategory(card.dataset.name);
+            updateEditButtonState();
+          }
+        });
+      });
+
+      // Search input filtering categories
+      searchInput.addEventListener("input", e => {
+        filterCategories(e.target.value);
+      });
+
+      // choix du fournisseur button
+      choixFournisseurBtn.addEventListener("click", () => {
+        popupFournisseur.setAttribute("aria-expanded", "true");
+        showModal(popupFournisseur);
+        btnValiderFournisseur.disabled = true;
+        selectedFournisseurName = null;
+        fournisseurCards.forEach(c => c.classList.remove("selected"));
+      });
+
+      // fournisseur card selection
+      fournisseurCards.forEach(card => {
+        card.addEventListener("click", () => {
+          fournisseurCards.forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          selectedFournisseurName = card.dataset.name;
+          btnValiderFournisseur.disabled = false;
+          btnValiderFournisseur.focus();
+        });
+        card.addEventListener("keydown", e => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            fournisseurCards.forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            selectedFournisseurName = card.dataset.name;
+            btnValiderFournisseur.disabled = false;
+            btnValiderFournisseur.focus();
+          }
+        });
+      });
+
+      // valider fournisseur button
+      btnValiderFournisseur.addEventListener("click", () => {
+        if (selectedFournisseurName) {
+          choixFournisseurBtn.textContent = selectedFournisseurName;
+          choixFournisseurBtn.setAttribute("aria-expanded","false");
+          hideModal(popupFournisseur);
+        }
+      });
+
+      // annuler fournisseur button
+      btnAnnulerFournisseur.addEventListener("click", () => {
+        choixFournisseurBtn.setAttribute("aria-expanded","false");
+        hideModal(popupFournisseur);
+      });
+
+      // modal closes for all modals
+      modalCloses.forEach(btn => {
+        btn.addEventListener("click", () => {
+          // Find parent modal
+          let parentModal = btn.closest(".modal");
+          if (!parentModal) return;
+
+          if (parentModal === popupAjouter) resetFormAjout();
+          if (parentModal === popupEditer) formEditer.reset();
+
+          if (parentModal === popupFournisseur) {
+            choixFournisseurBtn.setAttribute("aria-expanded", "false");
+          }
+
+          hideModal(parentModal);
+        });
+      });
+
+      // Information popup valider button
+      btnValiderInfo.addEventListener("click", () => {
+        hideModal(popupInformation);
+      });
+
+      // Button Ajouter ouvert popupAjouter
+      btnAjouter.addEventListener("click", () => {
+        resetFormAjout();
+        showModal(popupAjouter);
+      });
+
+      // Annuler popupAjouter
+      btnAnnulerAjouter.addEventListener("click", () => {
+        hideModal(popupAjouter);
+      });
+
+      // Annuler popupEditer
+      btnAnnulerEditer.addEventListener("click", () => {
+        hideModal(popupEditer);
+      });
+
+      // Button Editer popup de modification
+      btnEditer.addEventListener("click", () => {
+        // Si pas de fournisseur choisi, afficher popup info
+        if (!selectedFournisseurName) {
+          showModal(popupInformation);
+          return;
+        }
+        // Sinon afficher popup edit
+        const selectedCard = categoriesGrid.querySelector(".category-card.selected");
+        if (!selectedCard) return;
+        editingCategoryIndex = [...categoriesGrid.children].indexOf(selectedCard);
+        // Préremplir le formulaire édition
+        fillFormEditer({
+          nom: selectedCard.textContent,
+          categorie: allCategories[0],
+          tempMin: "0.000",
+          tempMax: "4.000",
+          tempLimite: "5.000",
+          checklist: true,
+        });
+        showModal(popupEditer);
+      });
+
+      // Char count update for inputs
+      function updateCharCount(inputElem, counterElem) {
+        counterElem.textContent = `${inputElem.value.length}/255`;
+      }
+      nomElementAjouter.addEventListener("input", () => updateCharCount(nomElementAjouter, compteurAjouter));
+      nomElementEditer.addEventListener("input", () => updateCharCount(nomElementEditer, compteurEditer));
+
+      // Form Ajouter submit
+      formAjouter.addEventListener("submit", e => {
+        e.preventDefault();
+        const nom = nomElementAjouter.value.trim();
+        if(nom === "") return;
+
+        // Ajouter nouveau élément à la liste (au début)
+        const newCard = document.createElement("div");
+        newCard.tabIndex = 0;
+        newCard.setAttribute("role", "listitem");
+        newCard.className = "category-card";
+        newCard.dataset.name = nom;
+        newCard.textContent = nom;
+
+        // Ajout listener click et keyboard
+        newCard.addEventListener("click", () => {
+          selectCategory(nom);
+          updateEditButtonState();
+        });
+        newCard.addEventListener("keydown", (ev) => {
+          if (ev.key === " " || ev.key === "Enter") {
+            ev.preventDefault();
+            selectCategory(nom);
+            updateEditButtonState();
+          }
+        });
+
+        categoriesGrid.appendChild(newCard);
+        // Sélectionner le nouvel élément
+        selectCategory(nom);
+        updateEditButtonState();
+        hideModal(popupAjouter);
+        formAjouter.reset();
+      });
+
+      // Form Editer submit
+      formEditer.addEventListener("submit", e => {
+        e.preventDefault();
+        if(editingCategoryIndex === -1) return;
+
+        const nom = nomElementEditer.value.trim();
+        if(nom === "") return;
+
+        const cards = categoriesGrid.querySelectorAll(".category-card");
+        const card = cards[editingCategoryIndex];
+        if(card){
+          card.textContent = nom;
+          card.dataset.name = nom;
+          selectCategory(nom);
+          updateEditButtonState();
+          hideModal(popupEditer);
+        }
+      });
+
+backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+
+
+      // Initial selection and button state update
+      selectCategory(selectedCategoryName);
+      updateEditButtonState();
+    })();
+  </script>
+</body>
+</html>

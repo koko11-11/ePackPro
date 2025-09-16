@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="styles.css" />
+<title>Suivi Huiles</title>
+<style>
+  #container {
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .box {
+    background-color: #f04e4e;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .box .name {
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .box .photo-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+    background-color: #90c94f;
+    border-radius: 50%;
+    display: none;
+  }
+  .box.has-photo .photo-indicator {
+    display: block;
+  }
+
+  /* نافذة الإضافة */
+  #addModal {
+    display: none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  #addModal.active {
+    display: flex;
+  }
+  #addModalContent {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 320px;
+    max-width: 400px;
+  }
+  #addModalContent h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #4b6d6c;
+  }
+  #addModalContent input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  #addModalContent .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #addModalContent button {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  #addModalContent button.valid {
+    background-color: #90c94f;
+    color: white;
+  }
+  #addModalContent button.cancel {
+    background-color: #f04e4e;
+    color: white;
+  }
+
+  /* نافذة التعديل */
+  #editModal {
+    display: none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  #editModal.active {
+    display: flex;
+  }
+  #editModalContent {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 320px;
+    max-width: 500px;
+  }
+  #editModalContent h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #4b6d6c;
+  }
+  #editModalContent input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  #editModalContent .photo-options {
+    margin: 20px 0;
+    text-align: center;
+  }
+  #editModalContent .photo-options button {
+    margin: 0 5px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: #4b6d6c;
+    color: white;
+  }
+  #editModalContent .saved-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  #editModalContent .saved-photos img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #editModalContent .saved-photos img.selected {
+    border-color: #90c94f;
+  }
+  #editModalContent .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #editModalContent button {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  #editModalContent button.valid {
+    background-color: #90c94f;
+    color: white;
+  }
+  #editModalContent button.cancel {
+    background-color: #f04e4e;
+    color: white;
+  }
+
+  /* نافذة الزيت */
+  #oilModal {
+    display: none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  #oilModal.active {
+    display: flex;
+  }
+  #oilModalContent {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 320px;
+    max-width: 400px;
+  }
+  #oilModalContent h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #4b6d6c;
+  }
+  #oilModalContent label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #oilModalContent input[type="radio"] {
+    margin-right: 6px;
+  }
+  #oilModalContent .camera-icon {
+    cursor: pointer;
+    margin: 25px auto;
+    width: 80px;
+    height: 80px;
+    border: 3px solid #365850;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    position: relative;
+    color: #365850;
+  }
+  #oilModalContent .camera-icon::after {
+    content: "+";
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #90c94f;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+  }
+  #oilModalContent .photo-preview {
+    width: 150px;
+    height: 120px;
+    object-fit: contain;
+    display: block;
+    margin: 10px auto;
+    border: 2px solid #365850;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #oilModalContent .modal-footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #oilModalContent button {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  #oilModalContent button.valid {
+    background-color: #90c94f;
+    color: white;
+  }
+  #oilModalContent button.cancel {
+    background-color: #f04e4e;
+    color: white;
+  }
+
+  /* كاميرا page - التعديلات الجديدة */
+  #cameraPage {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 56px);
+    padding: 20px;
+    background: #eaf0fa;
+    position: relative;
+  }
+  #cameraPage video, #cameraPage img {
+    max-width: 90%;
+    max-height: 70vh;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 3px solid #365850;
+  }
+  #cameraPage .camera-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 20;
+  }
+  #cameraPage .camera-controls button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #365850;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  #cameraPage .validate {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #90c94f !important;
+    color: white;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+  }
+  #cameraPage .retake {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #f04e4e !important;
+    color: white;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  /* نافذة عرض الصورة */
+  #photoViewModal {
+    display: none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  #photoViewModal.active {
+    display: flex;
+  }
+  #photoViewContent {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+  #photoViewContent img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+  #closePhotoView {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
+
+    <h1 class="page-title">SUIVI HUILES</h1>
+  </header>
+  
+
+  <div id="mainContent">
+    <div id="container"></div>
+  </div>
+  <div id="cameraPage">
+    <video id="video" autoplay></video>
+    <img id="capturedImg" style="display:none" />
+    
+    <div class="camera-controls">
+      <button id="flipCamBtn"><i class="fas fa-sync-alt"></i></button>
+      <button id="captureBtn"><i class="fas fa-camera"></i></button>
+      <button id="closeCamBtn"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <button class="retake" onclick="retakePhoto()" style="display:none">Reprendre</button>
+    <button class="validate" onclick="validatePhoto()">Valider</button>
+  </div>
+
+  <!-- نافذة إضافة عنصر -->
+  <div id="addModal">
+    <div id="addModalContent">
+      <div style="position:absolute; right:10px; top:10px; cursor:pointer; font-weight:bold; font-size:20px;" onclick="closeAddModal()">×</div>
+      <h2>Ajouter un élément</h2>
+      <input type="text" id="newElementName" placeholder="Nom du nouvel élément" />
+      <div class="modal-footer">
+        <button class="cancel" onclick="closeAddModal()">Annuler</button>
+        <button class="valid" onclick="validateAddModal()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل عنصر -->
+  <div id="editModal">
+    <div id="editModalContent">
+      <div style="position:absolute; right:10px; top:10px; cursor:pointer; font-weight:bold; font-size:20px;" onclick="closeEditModal()">×</div>
+      <h2>Éditer un élément</h2>
+      <input type="text" id="editElementName" placeholder="Nom de l'élément" />
+      
+      <div class="photo-options">
+        <button onclick="openCameraForEdit()"><i class="fas fa-camera"></i> Prendre une photo</button>
+        <button onclick="showSavedPhotos()"><i class="fas fa-images"></i> Photos enregistrées</button>
+      </div>
+      
+      <div id="savedPhotosContainer" class="saved-photos" style="display: none;"></div>
+      
+      <div class="modal-footer">
+        <button class="cancel" onclick="closeEditModal()">Annuler</button>
+        <button class="valid" onclick="validateEditModal()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="oilModal">
+    <div id="oilModalContent">
+      <div style="position:absolute; right:10px; top:10px; cursor:pointer; font-weight:bold; font-size:20px;" onclick="closeOilModal()">×</div>
+      <h2 id="oilModalTitle">FRITEUSE FRITES</h2>
+      <form id="oilForm">
+        <label><input type="radio" name="oilState" value="conserve" checked> Je conserve l'huile</label>
+        <label><input type="radio" name="oilState" value="change"> Je change l'huile</label>
+      </form>
+      <div class="camera-icon" id="openCamera" title="Veuillez prendre une photo"> 
+        <div class="icon-btn"><i class="fas fa-camera"></i></div>
+      </div>
+      <img id="photoPreview" class="photo-preview" alt="Preview Photo" style="display:none" onclick="viewPhoto(this.src)" />
+      <div class="modal-footer">
+        <button class="cancel" onclick="closeOilModal()">Annuler</button>
+        <button class="valid" onclick="validateOilModal()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="photoViewModal">
+    <div id="photoViewContent">
+      <button id="closePhotoView" onclick="closePhotoView()">×</button>
+      <img id="viewedPhoto" src="" />
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button id="ajouterBtn" class="btn-action" aria-haspopup="dialog" onclick="openAddModal()">+ Ajouter un élément</button>
+    <button id="editerBtn" class="btn-action" aria-disabled="false" onclick="openEditModal()"><i class="fas fa-edit"></i> Éditer un élément</button>
+
+    <div class="search-container">
+      <input type="search" aria-label="Rechercher" placeholder="Rechercher" id="searchInput" oninput="searchElements()" />
+      <div class="search-icon"><i class="fas fa-search"></i></div>
+    </div>
+    <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
+  </div>
+
+<script>
+// البيانات الأولية
+let items = [
+  { id: 1, name: "Friteuse frites", oilState: "conserve", photo: null },
+  { id: 2, name: "Friteuse poulet 1", oilState: "conserve", photo: null },
+  { id: 3, name: "Friteuse poulet 2", oilState: "conserve", photo: null },
+  { id: 4, name: "Friteuse poulet 3", oilState: "conserve", photo: null },
+];
+
+let selectedItemId = null;
+let isEditing = false;
+let savedPhotos = [];
+let selectedPhoto = null;
+let currentCameraContext = null; // 'oil' أو 'edit'
+
+const container = document.getElementById("container");
+const searchInput = document.getElementById("searchInput");
+const terminerBtn = document.getElementById("terminerBtn");
+
+function renderItems(filter="") {
+  container.innerHTML = "";
+  let filtered = items.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
+  filtered.forEach(item => {
+    const box = document.createElement("div");
+    box.className = "box";
+    if (item.photo) {
+      box.classList.add("has-photo");
+    }
+    
+    const indicator = document.createElement("div");
+    indicator.className = "photo-indicator";
+    box.appendChild(indicator);
+    
+    const nameDiv = document.createElement("div");
+    nameDiv.className = "name";
+    nameDiv.textContent = item.name;
+    box.appendChild(nameDiv);
+    
+    box.onclick = () => openOilModal(item.id);
+    container.appendChild(box);
+  });
+  
+  // تفعيل زر "J'ai terminé" إذا كان هناك عناصر
+  terminerBtn.disabled = items.length === 0;
+}
+
+function openOilModal(id) {
+  selectedItemId = id;
+  const item = items.find(i => i.id === id);
+  document.getElementById("oilModalTitle").textContent = item.name.toUpperCase();
+  
+  // ضبط البيانات السابقة
+  document.getElementById("oilForm").oilState.value = item.oilState;
+  const photoPreview = document.getElementById("photoPreview");
+  if(item.photo){
+    photoPreview.src = item.photo;
+    photoPreview.style.display = "block";
+    document.getElementById("openCamera").style.display = "none";
+  } else {
+    photoPreview.style.display = "none";
+    document.getElementById("openCamera").style.display = "flex";
+  }
+  document.getElementById("oilModal").classList.add("active");
+}
+
+function closeOilModal() {
+  document.getElementById("oilModal").classList.remove("active");
+  clearCamera();
+}
+
+function validateOilModal() {
+  const formData = new FormData(document.getElementById("oilForm"));
+  const chosenState = formData.get("oilState");
+  if(selectedItemId !== null){
+    const item = items.find(i => i.id === selectedItemId);
+    item.oilState = chosenState;
+    // الصورة محفوظة مسبقاً مباشرة في Preview src 
+    const photoPreview = document.getElementById("photoPreview");
+    if(photoPreview.src && photoPreview.style.display === "block"){
+      item.photo = photoPreview.src;
+      
+      // حفظ الصورة في القائمة
+      if (!savedPhotos.includes(photoPreview.src)) {
+        savedPhotos.push(photoPreview.src);
+      }
+    }
+  }
+  closeOilModal();
+  renderItems(searchInput.value);
+}
+
+function openAddModal() {
+  document.getElementById("newElementName").value = "";
+  document.getElementById("addModal").classList.add("active");
+}
+
+function closeAddModal() {
+  document.getElementById("addModal").classList.remove("active");
+}
+
+function validateAddModal() {
+  const newName = document.getElementById("newElementName").value.trim();
+  if(newName !== ""){
+    const newId = items.length ? Math.max(...items.map(i => i.id)) + 1 : 1;
+    items.push({id: newId, name: newName, oilState: 'conserve', photo: null});
+    renderItems(searchInput.value);
+  }
+  closeAddModal();
+}
+
+function openEditModal() {
+  if(selectedItemId === null){
+    alert("Veuillez sélectionner un élément en cliquant dessus.");
+    return;
+  }
+  
+  const item = items.find(i => i.id === selectedItemId);
+  document.getElementById("editElementName").value = item.name;
+  document.getElementById("editModal").classList.add("active");
+}
+
+function closeEditModal() {
+  document.getElementById("editModal").classList.remove("active");
+  document.getElementById("savedPhotosContainer").style.display = "none";
+  selectedPhoto = null;
+}
+
+function validateEditModal() {
+  const newName = document.getElementById("editElementName").value.trim();
+  if(newName !== "" && selectedItemId !== null){
+    const item = items.find(i => i.id === selectedItemId);
+    item.name = newName;
+    
+    // إذا تم اختيار صورة من القائمة
+    if (selectedPhoto) {
+      item.photo = selectedPhoto;
+    }
+    
+    renderItems(searchInput.value);
+  }
+  closeEditModal();
+}
+
+function openCameraForEdit() {
+  currentCameraContext = 'edit';
+  document.getElementById("editModal").style.display = "none";
+  document.getElementById("cameraPage").style.display = "flex";
+  startCamera();
+}
+
+function showSavedPhotos() {
+  const container = document.getElementById("savedPhotosContainer");
+  container.innerHTML = "";
+  container.style.display = "flex";
+  
+  if (savedPhotos.length === 0) {
+    container.innerHTML = "<p>Aucune photo enregistrée</p>";
+    return;
+  }
+  
+  savedPhotos.forEach(photo => {
+    const img = document.createElement("img");
+    img.src = photo;
+    img.onclick = () => {
+      // إزالة التحديد من جميع الصور
+      document.querySelectorAll("#savedPhotosContainer img").forEach(img => {
+        img.classList.remove("selected");
+      });
+      // تحديد الصورة المختارة
+      img.classList.add("selected");
+      selectedPhoto = photo;
+    };
+    container.appendChild(img);
+  });
+}
+
+// البحث
+function searchElements() {
+  const q = searchInput.value;
+  renderItems(q);
+}
+// --- الكاميرا (محاكاة) ---
+const video = document.getElementById("video");
+const capturedImg = document.getElementById("capturedImg");
+const captureBtn = document.getElementById("captureBtn");
+const flipCamBtn = document.getElementById("flipCamBtn");
+const closeCamBtn = document.getElementById("closeCamBtn");
+
+let stream = null;
+let usingFrontCam = false;
+let currentPhotoData = null;
+
+document.getElementById("openCamera").onclick = () => {
+  currentCameraContext = 'oil';
+  openCamera();
+};
+
+function openCamera() {
+  if (currentCameraContext === 'oil') {
+    document.getElementById("oilModal").style.display = "none";
+  }
+  document.getElementById("cameraPage").style.display = "flex";
+  startCamera();
+  
+  // إظهار أزرار التحكم وإخفاء زر إعادة الالتقاط
+  document.querySelector(".retake").style.display = "none";
+  document.querySelector(".validate").style.display = "none";
+  video.style.display = "block";
+  capturedImg.style.display = "none";
+}
+
+function closeCamera() {
+  stopCamera();
+  document.getElementById("cameraPage").style.display = "none";
+  
+  // العودة إلى النافذة المناسبة
+  if (currentCameraContext === 'edit') {
+    document.getElementById("editModal").style.display = "flex";
+  } else {
+    document.getElementById("oilModal").style.display = "flex";
+  }
+}
+
+function retakePhoto() {
+  // إعادة تشغيل الكاميرا للتقاط صورة جديدة
+  document.querySelector(".retake").style.display = "none";
+  document.querySelector(".validate").style.display = "none";
+  video.style.display = "block";
+  capturedImg.style.display = "none";
+  startCamera();
+}
+
+function validatePhoto() {
+  // حفظ الصورة والعودة
+  if (currentPhotoData) {
+    const photoPreview = document.getElementById("photoPreview");
+    photoPreview.src = currentPhotoData;
+    photoPreview.style.display = "block";
+    
+    if (currentCameraContext === 'oil') {
+      document.getElementById("openCamera").style.display = "none";
+    }
+    
+    // حفظ الصورة في القائمة
+    if (!savedPhotos.includes(currentPhotoData)) {
+      savedPhotos.push(currentPhotoData);
+    }
+  }
+  
+  closeCamera();
+}
+
+async function startCamera() {
+  try {
+    if(stream){
+      stopCamera();
+    }
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: usingFrontCam ? "user" : "environment"
+      }
+    });
+    video.srcObject = stream;
+  } catch (err) {
+    alert("Impossible d'accéder à la caméra.");
+  }
+}
+
+function stopCamera() {
+  if(stream){
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
+}
+
+flipCamBtn.onclick = () => {
+  usingFrontCam = !usingFrontCam;
+  startCamera();
+}
+
+captureBtn.onclick = () => {
+  // أخذ صورة من الفيديو وتحويلها إلى صورة ثابتة
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0);
+  const imageData = canvas.toDataURL("image/png");
+  
+  // إظهار الصورة وإخفاء الفيديو
+  capturedImg.src = imageData;
+  capturedImg.style.display = "block";
+  video.style.display = "none";
+  
+  // إظهار أزرار التحكم
+  document.querySelector(".retake").style.display = "block";
+  document.querySelector(".validate").style.display = "block";
+  
+  // حفظ بيانات الصورة الحالية
+  currentPhotoData = imageData;
+  
+  // إيقاف الكاميرا
+  stopCamera();
+}
+
+closeCamBtn.onclick = () => {
+  closeCamera();
+}
+
+function clearCamera() {
+  capturedImg.src = "";
+  capturedImg.style.display = "none";
+  const photoPreview = document.getElementById("photoPreview");
+  photoPreview.src = "";
+  photoPreview.style.display = "none";
+  document.getElementById("openCamera").style.display = "flex";
+  currentPhotoData = null;
+}
+
+// عرض الصورة في نافذة كبيرة
+function viewPhoto(src) {
+  if (!src) return;
+  document.getElementById("viewedPhoto").src = src;
+  document.getElementById("photoViewModal").classList.add("active");
+}
+
+function closePhotoView() {
+  document.getElementById("photoViewModal").classList.remove("active");
+}
+
+window.onload = () => {
+  renderItems();
+  
+  // إضافة مستمعي الأحداث
+  closeCamBtn.addEventListener("click", closeCamera);
+  document.getElementById("closePhotoView").addEventListener("click", closePhotoView);
+};
+
+backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
+</script>
+</body>
+</html>
