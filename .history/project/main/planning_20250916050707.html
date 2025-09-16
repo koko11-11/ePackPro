@@ -241,7 +241,7 @@
 
       // زر الرجوع للصفحة الأولى
   backToPage1.addEventListener('click', () => {
-  window.history.back();
+    window.location.href = 'tracabilite.html'; // العودة إلى الصفحة الأولى
   });
     // Save the initial tasks from the DOM for reset later
     const oilTasksContainer = document.getElementById('oilTasks');
