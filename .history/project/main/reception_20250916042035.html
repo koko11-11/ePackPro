@@ -9,7 +9,7 @@
 
 </head>
 <body>
- 
+  <!-- RÉCEPTION MARCHANDISES PAGE -->
   <header class="header">
     <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
     <h1 class="page-title">RÉCEPTION MARCHANDISES</h1>
@@ -43,8 +43,9 @@
     </div>
   </main>
 
+  <!-- POPUPS / MODALS -->
 
-
+  <!-- Choix du fournisseur popup -->
   <div id="popupFournisseur" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupFournisseurTitle" hidden>
     <div class="modal-content">
       <header class="modal-header">
@@ -66,7 +67,7 @@
     </div>
   </div>
 
-
+  <!-- Information popup -->
   <div id="popupInformation" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="popupInfoTitle" hidden>
     <div class="modal-content small">
       <header class="modal-header">
@@ -80,7 +81,7 @@
     </div>
   </div>
 
-
+  <!-- Ajouter un élément popup -->
   <div id="popupAjouter" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupAjouterTitle" hidden>
 
     <div class="modal-content form-modal">
@@ -139,7 +140,7 @@
     </div>
   </div>
 
-
+  <!-- Éditer un élément popup -->
   <div id="popupEditer" class="modal" role="dialog" aria-modal="true" aria-labelledby="popupEditerTitle" hidden>
     <div class="modal-content form-modal">
       <header class="modal-header">
@@ -222,36 +223,37 @@
       const categoriesGrid = document.querySelector(".categories-grid");
       const fournisseurCards = popupFournisseur.querySelectorAll(".fournisseur-card");
 
+      // Popups forms inputs
       const formAjouter = document.getElementById("formAjouter");
       const nomElementAjouter = document.getElementById("nomElementAjouter");
       const compteurAjouter = document.getElementById("compteurAjouter");
       const categorieSelectAjouter = document.getElementById("categorieSelectAjouter");
       const checkListAjouter = document.getElementById("checklistAjouter");
-   
+      // temps values ajouter
       const tempMinAjouter = document.getElementById("tempMinAjouter");
       const tempMaxAjouter = document.getElementById("tempMaxAjouter");
       const tempLimiteAjouter = document.getElementById("tempLimiteAjouter");
 
- 
+      // forms editer
       const formEditer = document.getElementById("formEditer");
       const nomElementEditer = document.getElementById("nomElementEditer");
       const compteurEditer = document.getElementById("compteurEditer");
       const categorieSelectEditer = document.getElementById("categorieSelectEditer");
       const checkListEditer = document.getElementById("checklistEditer");
- 
+      // temps values editer
       const tempMinEditer = document.getElementById("tempMinEditer");
       const tempMaxEditer = document.getElementById("tempMaxEditer");
       const tempLimiteEditer = document.getElementById("tempLimiteEditer");
 
-   
+      // Data state
       let selectedCategoryName = "Divers frais";
       let selectedFournisseurName = null;
       let editingCategoryIndex = -1;
 
-   
+      // Static categories list (for selects)
       const allCategories = ["Catégorie 1", "Catégorie 2", "Catégorie 3", "Catégorie 4"];
 
-   
+      // Load category options into selects
       function fillCategorieSelect(selectElem) {
         selectElem.innerHTML = "";
         allCategories.forEach(cat => {
@@ -264,7 +266,9 @@
       fillCategorieSelect(categorieSelectAjouter);
       fillCategorieSelect(categorieSelectEditer);
 
-  
+      // --- FUNCTIONS ---
+
+      // Utility: toggle modal display
       function showModal(modal) {
         modal.removeAttribute("hidden");
         modal.querySelector(".modal-content").focus();
@@ -275,7 +279,7 @@
         document.body.style.overflow = "";
       }
 
-   
+      // Set selected category card in Reception page
       function selectCategory(name) {
         selectedCategoryName = name;
         categoriesGrid.querySelectorAll(".category-card").forEach(card => {
@@ -285,7 +289,7 @@
         });
       }
 
- 
+      // Filter category cards on search
       function filterCategories(searchTerm) {
         categoriesGrid.querySelectorAll(".category-card").forEach(card => {
           const text = card.textContent.toLowerCase();
@@ -293,13 +297,13 @@
         });
       }
 
-
+      // Validate if editing enabled button "Éditer un élément"
       function updateEditButtonState() {
         btnEditer.disabled = !selectedCategoryName || !categoriesGrid.querySelector(".category-card.selected");
         btnEditer.setAttribute("aria-disabled", btnEditer.disabled.toString());
       }
 
-    
+      // Reset and fill form fields (Ajouter or Editer)
       function resetFormAjout() {
         nomElementAjouter.value = "";
         compteurAjouter.textContent = "0/255";
@@ -319,6 +323,9 @@
         checkListEditer.checked = data.checklist || false;
       }
 
+      // --- EVENT LISTENERS ---
+
+      // Selection of category cards
       categoriesGrid.querySelectorAll(".category-card").forEach(card => {
         card.addEventListener("click", () => {
           selectCategory(card.dataset.name);
@@ -333,11 +340,12 @@
         });
       });
 
- 
+      // Search input filtering categories
       searchInput.addEventListener("input", e => {
         filterCategories(e.target.value);
       });
 
+      // choix du fournisseur button
       choixFournisseurBtn.addEventListener("click", () => {
         popupFournisseur.setAttribute("aria-expanded", "true");
         showModal(popupFournisseur);
@@ -346,6 +354,7 @@
         fournisseurCards.forEach(c => c.classList.remove("selected"));
       });
 
+      // fournisseur card selection
       fournisseurCards.forEach(card => {
         card.addEventListener("click", () => {
           fournisseurCards.forEach(c => c.classList.remove("selected"));
@@ -366,6 +375,7 @@
         });
       });
 
+      // valider fournisseur button
       btnValiderFournisseur.addEventListener("click", () => {
         if (selectedFournisseurName) {
           choixFournisseurBtn.textContent = selectedFournisseurName;
@@ -374,15 +384,16 @@
         }
       });
 
+      // annuler fournisseur button
       btnAnnulerFournisseur.addEventListener("click", () => {
         choixFournisseurBtn.setAttribute("aria-expanded","false");
         hideModal(popupFournisseur);
       });
 
-  
+      // modal closes for all modals
       modalCloses.forEach(btn => {
         btn.addEventListener("click", () => {
-
+          // Find parent modal
           let parentModal = btn.closest(".modal");
           if (!parentModal) return;
 
@@ -397,38 +408,39 @@
         });
       });
 
- 
+      // Information popup valider button
       btnValiderInfo.addEventListener("click", () => {
         hideModal(popupInformation);
       });
 
+      // Button Ajouter ouvert popupAjouter
       btnAjouter.addEventListener("click", () => {
         resetFormAjout();
         showModal(popupAjouter);
       });
 
-
+      // Annuler popupAjouter
       btnAnnulerAjouter.addEventListener("click", () => {
         hideModal(popupAjouter);
       });
 
- 
+      // Annuler popupEditer
       btnAnnulerEditer.addEventListener("click", () => {
         hideModal(popupEditer);
       });
 
-
+      // Button Editer popup de modification
       btnEditer.addEventListener("click", () => {
-     
+        // Si pas de fournisseur choisi, afficher popup info
         if (!selectedFournisseurName) {
           showModal(popupInformation);
           return;
         }
-  
+        // Sinon afficher popup edit
         const selectedCard = categoriesGrid.querySelector(".category-card.selected");
         if (!selectedCard) return;
         editingCategoryIndex = [...categoriesGrid.children].indexOf(selectedCard);
-    
+        // Préremplir le formulaire édition
         fillFormEditer({
           nom: selectedCard.textContent,
           categorie: allCategories[0],
@@ -440,18 +452,20 @@
         showModal(popupEditer);
       });
 
-  
+      // Char count update for inputs
       function updateCharCount(inputElem, counterElem) {
         counterElem.textContent = `${inputElem.value.length}/255`;
       }
       nomElementAjouter.addEventListener("input", () => updateCharCount(nomElementAjouter, compteurAjouter));
       nomElementEditer.addEventListener("input", () => updateCharCount(nomElementEditer, compteurEditer));
 
+      // Form Ajouter submit
       formAjouter.addEventListener("submit", e => {
         e.preventDefault();
         const nom = nomElementAjouter.value.trim();
         if(nom === "") return;
 
+        // Ajouter nouveau élément à la liste (au début)
         const newCard = document.createElement("div");
         newCard.tabIndex = 0;
         newCard.setAttribute("role", "listitem");
@@ -459,6 +473,7 @@
         newCard.dataset.name = nom;
         newCard.textContent = nom;
 
+        // Ajout listener click et keyboard
         newCard.addEventListener("click", () => {
           selectCategory(nom);
           updateEditButtonState();
@@ -472,14 +487,14 @@
         });
 
         categoriesGrid.appendChild(newCard);
-    
+        // Sélectionner le nouvel élément
         selectCategory(nom);
         updateEditButtonState();
         hideModal(popupAjouter);
         formAjouter.reset();
       });
 
-   
+      // Form Editer submit
       formEditer.addEventListener("submit", e => {
         e.preventDefault();
         if(editingCategoryIndex === -1) return;
@@ -503,7 +518,7 @@ backToPage1.addEventListener('click', () => {
 });
 
 
-   
+      // Initial selection and button state update
       selectCategory(selectedCategoryName);
       updateEditButtonState();
     })();

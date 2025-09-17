@@ -6,7 +6,7 @@
 <title>NETTOYAGE POSTES</title>
 <link rel="stylesheet" href="styles.css" />
 <style>
-
+  /* Tabs */
   .tabs {
     margin: 1rem;
     display: flex;
@@ -32,6 +32,7 @@
     background-color: #f3f6fa;
   }
 
+  /* Content sections (accordion style) */
   section {
     margin: 0 1rem 1.5rem;
   }
@@ -62,7 +63,7 @@
     font-size: 1.25rem;
     user-select: none;
   }
- 
+  /* Cards container */
   .cards-container {
     background: white;
     border-radius: 0 0 6px 6px;
@@ -71,7 +72,7 @@
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
- 
+  /* Single Card */
   .card {
     box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
     border-radius: 6px;
@@ -81,7 +82,7 @@
     flex-direction: column;
   }
   .card-header {
-    background-color: #dc3c3c; 
+    background-color: #dc3c3c; /* لون الهيدر الأحمر */
     color: #fff;
     font-weight: 600;
     padding: 0.4rem 0.6rem;
@@ -99,15 +100,15 @@
 
     <h1 class="page-title">NETTOYAGE POSTES</h1>
   </header>
-
+<!-- Tabs -->
 <div class="tabs" role="tablist" aria-label="Zones">
   <button class="tab-btn active" data-target="cuisine" role="tab" aria-selected="true" tabindex="0">CUISINE</button>
   <button class="tab-btn" data-target="sous-sol" role="tab" aria-selected="false" tabindex="-1">LABORATOIRE</button>
 </div>
 
-
+<!-- Content Sections -->
 <main style="flex-grow:1; overflow-y: auto;">
-
+  <!-- استبدل محتوى قسم CUISINE بهذا -->
 <section id="cuisine" role="tabpanel" aria-labelledby="tab-cuisine">
   <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="cuisine-cards" aria-label="Cuisine section, 8 éléments">
     CUISINE
@@ -185,7 +186,7 @@
   </div>
 </section>
 
-
+<!-- استبدل محتوى قسم SOUS-SOL بهذا -->
 <section id="sous-sol" role="tabpanel" aria-labelledby="tab-sous-sol" hidden>
   <div class="section-header" tabindex="0" aria-expanded="true" aria-controls="sous-sol-cards" aria-label="Sous-Sol section, 5 éléments">
     LABORATOIRE
@@ -257,13 +258,13 @@
   backToPage1.addEventListener('click', () => {
   window.history.back();
 });
-
+  // Tab switching
   const tabs = document.querySelectorAll(".tab-btn");
   const sections = document.querySelectorAll("main > section");
 
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
-   
+      // Set tab active state
       tabs.forEach(t => {
         t.classList.remove("active");
         t.setAttribute("aria-selected", "false");
@@ -273,6 +274,7 @@
       tab.setAttribute("aria-selected", "true");
       tab.setAttribute("tabindex", "0");
 
+      // Show content
       const target = tab.getAttribute("data-target");
       sections.forEach(section => {
         if(section.id === target){
@@ -284,7 +286,7 @@
     });
   });
 
-
+  // Accordion toggle for sections
   const sectionHeaders = document.querySelectorAll(".section-header");
   sectionHeaders.forEach(header => {
     header.addEventListener("click", () => {
@@ -292,12 +294,12 @@
       const cardsContainer = header.nextElementSibling;
       if(expanded){
         header.setAttribute("aria-expanded", "false");
-        header.querySelector(".toggle-icon").innerHTML = "&#9660;"; 
+        header.querySelector(".toggle-icon").innerHTML = "&#9660;"; // Down arrow
         cardsContainer.style.display = "none";
       } else {
         header.setAttribute("aria-expanded", "true");
-        header.querySelector(".toggle-icon").innerHTML = "&#9650;"; 
-        cardsContainer.style.display = "grid"; 
+        header.querySelector(".toggle-icon").innerHTML = "&#9650;"; // Up arrow
+        cardsContainer.style.display = "grid"; // Or "block" depending on original layout
       }
     });
     header.addEventListener("keydown", e => {
@@ -308,7 +310,7 @@
     });
   });
 
-
+  // Search functionality
   const searchInput = document.getElementById("searchInput");
   searchInput.addEventListener("input", e => {
     const query = e.target.value.trim().toLowerCase();
@@ -321,7 +323,7 @@
     });
   });
 
-  
+  // Add / Edit / Done buttons placeholder actions
   document.getElementById("addBtn").addEventListener("click", () => {
     alert("Ajouter un élément - Action simulée.");
   });

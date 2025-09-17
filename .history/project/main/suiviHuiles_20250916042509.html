@@ -49,6 +49,7 @@
     display: block;
   }
 
+  /* نافذة الإضافة */
   #addModal {
     display: none;
     position: fixed;
@@ -103,6 +104,7 @@
     color: white;
   }
 
+  /* نافذة التعديل */
   #editModal {
     display: none;
     position: fixed;
@@ -190,7 +192,7 @@
     color: white;
   }
 
- 
+  /* نافذة الزيت */
   #oilModal {
     display: none;
     position: fixed;
@@ -287,7 +289,7 @@
     color: white;
   }
 
-  
+  /* كاميرا page - التعديلات الجديدة */
   #cameraPage {
     display: none;
     flex-direction: column;
@@ -355,7 +357,7 @@
     z-index: 20;
   }
 
- 
+  /* نافذة عرض الصورة */
   #photoViewModal {
     display: none;
     position: fixed;
@@ -415,7 +417,7 @@
     <button class="validate" onclick="validatePhoto()">Valider</button>
   </div>
 
-  
+  <!-- نافذة إضافة عنصر -->
   <div id="addModal">
     <div id="addModalContent">
       <div style="position:absolute; right:10px; top:10px; cursor:pointer; font-weight:bold; font-size:20px;" onclick="closeAddModal()">×</div>
@@ -428,7 +430,7 @@
     </div>
   </div>
 
-  
+  <!-- نافذة تعديل عنصر -->
   <div id="editModal">
     <div id="editModalContent">
       <div style="position:absolute; right:10px; top:10px; cursor:pointer; font-weight:bold; font-size:20px;" onclick="closeEditModal()">×</div>
@@ -487,7 +489,7 @@
   </div>
 
 <script>
-
+// البيانات الأولية
 let items = [
   { id: 1, name: "Friteuse frites", oilState: "conserve", photo: null },
   { id: 2, name: "Friteuse poulet 1", oilState: "conserve", photo: null },
@@ -499,7 +501,7 @@ let selectedItemId = null;
 let isEditing = false;
 let savedPhotos = [];
 let selectedPhoto = null;
-let currentCameraContext = null; 
+let currentCameraContext = null; // 'oil' أو 'edit'
 
 const container = document.getElementById("container");
 const searchInput = document.getElementById("searchInput");
@@ -528,7 +530,7 @@ function renderItems(filter="") {
     container.appendChild(box);
   });
   
-  
+  // تفعيل زر "J'ai terminé" إذا كان هناك عناصر
   terminerBtn.disabled = items.length === 0;
 }
 
@@ -537,7 +539,7 @@ function openOilModal(id) {
   const item = items.find(i => i.id === id);
   document.getElementById("oilModalTitle").textContent = item.name.toUpperCase();
   
-
+  // ضبط البيانات السابقة
   document.getElementById("oilForm").oilState.value = item.oilState;
   const photoPreview = document.getElementById("photoPreview");
   if(item.photo){
@@ -562,12 +564,12 @@ function validateOilModal() {
   if(selectedItemId !== null){
     const item = items.find(i => i.id === selectedItemId);
     item.oilState = chosenState;
-  
+    // الصورة محفوظة مسبقاً مباشرة في Preview src 
     const photoPreview = document.getElementById("photoPreview");
     if(photoPreview.src && photoPreview.style.display === "block"){
       item.photo = photoPreview.src;
       
-    
+      // حفظ الصورة في القائمة
       if (!savedPhotos.includes(photoPreview.src)) {
         savedPhotos.push(photoPreview.src);
       }
@@ -619,7 +621,7 @@ function validateEditModal() {
     const item = items.find(i => i.id === selectedItemId);
     item.name = newName;
     
-   
+    // إذا تم اختيار صورة من القائمة
     if (selectedPhoto) {
       item.photo = selectedPhoto;
     }
@@ -650,11 +652,11 @@ function showSavedPhotos() {
     const img = document.createElement("img");
     img.src = photo;
     img.onclick = () => {
-    
+      // إزالة التحديد من جميع الصور
       document.querySelectorAll("#savedPhotosContainer img").forEach(img => {
         img.classList.remove("selected");
       });
-    
+      // تحديد الصورة المختارة
       img.classList.add("selected");
       selectedPhoto = photo;
     };
@@ -662,12 +664,12 @@ function showSavedPhotos() {
   });
 }
 
-
+// البحث
 function searchElements() {
   const q = searchInput.value;
   renderItems(q);
 }
-
+// --- الكاميرا (محاكاة) ---
 const video = document.getElementById("video");
 const capturedImg = document.getElementById("capturedImg");
 const captureBtn = document.getElementById("captureBtn");
@@ -690,7 +692,7 @@ function openCamera() {
   document.getElementById("cameraPage").style.display = "flex";
   startCamera();
   
-  
+  // إظهار أزرار التحكم وإخفاء زر إعادة الالتقاط
   document.querySelector(".retake").style.display = "none";
   document.querySelector(".validate").style.display = "none";
   video.style.display = "block";
@@ -701,7 +703,7 @@ function closeCamera() {
   stopCamera();
   document.getElementById("cameraPage").style.display = "none";
   
- 
+  // العودة إلى النافذة المناسبة
   if (currentCameraContext === 'edit') {
     document.getElementById("editModal").style.display = "flex";
   } else {
@@ -710,7 +712,7 @@ function closeCamera() {
 }
 
 function retakePhoto() {
-
+  // إعادة تشغيل الكاميرا للتقاط صورة جديدة
   document.querySelector(".retake").style.display = "none";
   document.querySelector(".validate").style.display = "none";
   video.style.display = "block";
@@ -719,7 +721,7 @@ function retakePhoto() {
 }
 
 function validatePhoto() {
- 
+  // حفظ الصورة والعودة
   if (currentPhotoData) {
     const photoPreview = document.getElementById("photoPreview");
     photoPreview.src = currentPhotoData;
@@ -729,7 +731,7 @@ function validatePhoto() {
       document.getElementById("openCamera").style.display = "none";
     }
     
-
+    // حفظ الصورة في القائمة
     if (!savedPhotos.includes(currentPhotoData)) {
       savedPhotos.push(currentPhotoData);
     }
@@ -767,25 +769,27 @@ flipCamBtn.onclick = () => {
 }
 
 captureBtn.onclick = () => {
- 
+  // أخذ صورة من الفيديو وتحويلها إلى صورة ثابتة
   const canvas = document.createElement("canvas");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0);
   const imageData = canvas.toDataURL("image/png");
-
+  
+  // إظهار الصورة وإخفاء الفيديو
   capturedImg.src = imageData;
   capturedImg.style.display = "block";
   video.style.display = "none";
- 
-
+  
+  // إظهار أزرار التحكم
   document.querySelector(".retake").style.display = "block";
   document.querySelector(".validate").style.display = "block";
-
+  
+  // حفظ بيانات الصورة الحالية
   currentPhotoData = imageData;
   
-
+  // إيقاف الكاميرا
   stopCamera();
 }
 
@@ -803,7 +807,7 @@ function clearCamera() {
   currentPhotoData = null;
 }
 
-
+// عرض الصورة في نافذة كبيرة
 function viewPhoto(src) {
   if (!src) return;
   document.getElementById("viewedPhoto").src = src;
@@ -817,7 +821,7 @@ function closePhotoView() {
 window.onload = () => {
   renderItems();
   
-
+  // إضافة مستمعي الأحداث
   closeCamBtn.addEventListener("click", closeCamera);
   document.getElementById("closePhotoView").addEventListener("click", closePhotoView);
 };

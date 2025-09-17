@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-
+    /* تنسيقات خاصة بالصفحة الأولى */
     #page1 {
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
-      min-height: calc(100vh - 56px - 3.5rem);
+      min-height: calc(100vh - 56px - 3.5rem); /* تأخذ في الاعتبار البار العلوي والسفلي */
       background: var(--color-bg-page);
       box-sizing: border-box;
     }
@@ -55,12 +55,13 @@
 </head>
 <body>
 
-
+  <!-- البار العلوي -->
   <header class="header">
 <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
     <h1 class="page-title">TRACABILITÉ PRODUITS</h1>
   </header>
 
+  <!-- محتوى الصفحة الأولى -->
   <main class="main-content">
     <div id="page1">
       <img src="1.jpg" alt="Produit Image" />
@@ -69,7 +70,7 @@
     </div>
   </main>
 
- 
+  <!-- البار السفلي -->
   <div class="bottom-bar">
     <button class="btn-action" aria-haspopup="dialog" disabled>
       <i class="fas fa-plus"></i> Ajouter un élément
@@ -94,7 +95,7 @@ window.location.href = '../../css/dashboard.html';
     const associerBtn = document.getElementById('associerBtn');
 
     associerBtn.addEventListener('click', () => {
-     
+      // عند الضغط على الزر، انتقل إلى الصفحة الثانية
       window.location.href = 'associer.html';
     });
   </script>

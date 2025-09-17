@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-
+    /* تنسيقات خاصة بالصفحة الثانية */
     .elements-list {
       padding: 1rem;
       flex-grow: 1;
@@ -65,7 +65,7 @@
       font-style: italic;
     }
     
-
+    /* تنسيقات النافذة المنبثقة */
     #modal {
       display: none;
       position: fixed;
@@ -224,19 +224,20 @@
 </head>
 <body>
 
-
+  <!-- البار العلوي -->
   <header class="header">
     <button id="backToPage1" class="back-button" aria-label="Retour">&#8592;</button>
     <h1 class="page-title">ASSOCIER À UNE PRODUCTION</h1>
   </header>
 
-
+  <!-- محتوى الصفحة الثانية -->
   <main class="main-content">
     <div id="elementsContainer" class="elements-list">
       <div class="empty-state">Aucun élément trouvé</div>
     </div>
   </main>
 
+  <!-- البار السفلي -->
   <div class="bottom-bar">
     <button id="ajouterElementBtn" class="btn-action"><i class="fas fa-plus"></i> Ajouter un élément</button>
     <button id="editerElementBtn" class="btn-action" disabled><i class="fas fa-edit"></i> Éditer un élément</button>
@@ -249,7 +250,7 @@
     <button id="terminerBtn" class="btn-terminer" disabled>J'ai terminé</button>
   </div>
 
-
+  <!-- النافذة المنبثقة -->
   <div id="modal">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <button class="close-icon" id="modalClose">&times;</button>
@@ -286,7 +287,7 @@
   </div>
 
 <script>
-
+  // المتغيرات
   const backToPage1 = document.getElementById('backToPage1');
   const elementsContainer = document.getElementById('elementsContainer');
   const ajouterElementBtn = document.getElementById('ajouterElementBtn');
@@ -304,25 +305,25 @@
   const incrementBtn = document.getElementById('incrementBtn');
   const quantityDisplay = document.getElementById('quantityDisplay');
 
-
+  // القيم الابتدائية
   let quantity = 3;
   let elements = [];
   let selectedElementId = null;
   let isEditing = false;
 
-
+  // زر الرجوع للصفحة الأولى
   backToPage1.addEventListener('click', () => {
-    window.location.href = 'tracabilite.html';
+    window.location.href = 'tracabilite.html'; // العودة إلى الصفحة الأولى
   });
 
-
+  // عرض نافذة الإضافة
   ajouterElementBtn.addEventListener('click', () => {
     isEditing = false;
     document.getElementById('modalTitle').textContent = 'Ajouter un élément';
     openModal();
   });
 
-
+  // عرض نافذة التعديل
   editerElementBtn.addEventListener('click', () => {
     if (selectedElementId === null) return;
     isEditing = true;
@@ -343,7 +344,7 @@
   modalClose.addEventListener('click', closeModal);
   cancelModalBtn.addEventListener('click', closeModal);
 
-
+  // التحكم بالعداد في الواجهة المنبثقة
   decrementBtn.addEventListener('click', () => {
     if (quantity > 0) {
       quantity--;
@@ -361,10 +362,10 @@
     decrementBtn.disabled = quantity === 0;
   }
 
-
+  // فتح وإغلاق النافذة
   function openModal() {
     if (!isEditing) {
-
+      // إعادة تعيين القيم للنمط الجديد
       elementNameInput.value = '';
       elementCatInput.value = '';
       dlcCheckbox.checked = false;
@@ -379,14 +380,14 @@
     selectedElementId = null;
   }
 
-
+  // تحديث حالة الأزرار بناءً على وجود عناصر
   function updateButtonsState() {
     const hasElements = elements.length > 0;
     editerElementBtn.disabled = !hasElements || selectedElementId === null;
     terminerBtn.disabled = !hasElements;
   }
 
-
+  // عرض العناصر في القائمة
   function renderElements() {
     elementsContainer.innerHTML = '';
     
@@ -421,7 +422,7 @@
     });
   }
 
-
+  // عند الضغط على زر Valider
   submitModalBtn.addEventListener('click', () => {
     const name = elementNameInput.value.trim();
     const cat = elementCatInput.value.trim();
@@ -433,7 +434,7 @@
     }
 
     if (isEditing && selectedElementId !== null) {
- 
+      // تعديل العنصر الموجود
       const elementIndex = elements.findIndex(el => el.id === selectedElementId);
       if (elementIndex !== -1) {
         elements[elementIndex] = {
@@ -445,7 +446,7 @@
         };
       }
     } else {
- 
+      // إضافة عنصر جديد
       const newId = elements.length > 0 ? Math.max(...elements.map(el => el.id)) + 1 : 1;
       elements.push({
         id: newId,
@@ -456,15 +457,15 @@
       });
     }
 
-  
+    // تحديث واجهة المستخدم
     renderElements();
     updateButtonsState();
 
-   
+    // إغلاق النافذة بعد الإضافة/التعديل
     closeModal();
   });
 
-
+  // البحث
   searchInput.addEventListener('input', () => {
     const searchTerm = searchInput.value.toLowerCase();
     if (searchTerm === '') {
@@ -498,13 +499,13 @@
     }
   });
 
-
+  // عند الضغط على زر الإنهاء
   terminerBtn.addEventListener('click', () => {
     alert('Opération terminée avec succès!');
-  
+    // يمكن هنا إضافة منطق لحفظ البيانات أو الانتقال إلى صفحة أخرى
   });
 
-
+  // تهيئة أولية
   updateQuantityDisplay();
   updateButtonsState();
   renderElements();
