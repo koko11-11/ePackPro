@@ -257,7 +257,7 @@
       <article class="card" tabindex="0">
         <div class="card-header">Cf viandes</div>
         <div class="card-image">
-          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=large-industrial-fridge-metal-door" alt="Large industrial fridge with metal door closed" />
+          <img src="" alt="Industrial fridge door for meat storage" />
         </div>
       </article>
     </div>
@@ -317,14 +317,10 @@
   </div>
 
 <script>
-  // Déclarations globales nécessaires
-  let calcValue = 0;
-  let lastFocus = null;
-  const popupCalculator = document.getElementById('popup-calculator'); // <-- AJOUTEZ CETTE LIGNE
 
-  backToPage1.addEventListener('click', () => {
-    window.history.back();
-  });
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
   // Tab switching
   const tabs = document.querySelectorAll(".tab-btn");
   const sections = document.querySelectorAll("main > section");
@@ -353,57 +349,49 @@
     });
   });
 
- // Accordion toggle for sections
-const sectionHeaders = document.querySelectorAll(".section-header");
-sectionHeaders.forEach(header => {
-  header.addEventListener("click", () => {
-    const expanded = header.getAttribute("aria-expanded") === "true";
-    const cardsContainer = header.nextElementSibling;
-    if (expanded) {
-      header.setAttribute("aria-expanded", "false");
-      header.querySelector(".toggle-icon").innerHTML = "&#9660;";
-      cardsContainer.style.display = "none";
-    } else {
-      header.setAttribute("aria-expanded", "true");
-      header.querySelector(".toggle-icon").innerHTML = "&#9650;";
-      cardsContainer.style.display = "grid";
-    }
-  });
-
-  header.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      header.click();
-    }
-  });
-
-  // Ajout des écouteurs d'événements pour les cartes à l'intérieur de chaque section
-  const cards = header.nextElementSibling.querySelectorAll('.card');
-  cards.forEach(card => {
-    const itemName = card.querySelector('.card-header').textContent; // Récupère le nom de l'élément
-
-    card.addEventListener('click', () => {
-      openCalculator(itemName, card); // Passe le nom de l'élément
+  // Accordion toggle for sections
+  const sectionHeaders = document.querySelectorAll(".section-header");
+  sectionHeaders.forEach(header => {
+    header.addEventListener("click", () => {
+      const expanded = header.getAttribute("aria-expanded") === "true";
+      const cardsContainer = header.nextElementSibling;
+      if(expanded){
+        header.setAttribute("aria-expanded", "false");
+        header.querySelector(".toggle-icon").innerHTML = "&#9660;";
+        cardsContainer.style.display = "none";
+      } else {
+        header.setAttribute("aria-expanded", "true");
+        header.querySelector(".toggle-icon").innerHTML = "&#9650;";
+        cardsContainer.style.display = "grid";
+      }
     });
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+     card.addEventListener('click', () => {
+            openCalculator(item, card);
+          });
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openCalculator(item, card);
+            }
+          });
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        openCalculator(itemName, card); // Passe le nom de l'élément
+        header.click();
       }
     });
   });
-});
-
   // Open calculator popup with selected item
-function openCalculator(itemName, cardEl) {
-  calcValue = 0; // reset or could load item qty if saved
-  document.getElementById('calc-title').textContent = itemName; // Ajouté pour mettre à jour le titre
-  updateCalcDisplay();
-  popupCalculator.classList.add('active');
-  popupCalculator.focus();
-  // Accessibility: save last focused element so we can return later
-  lastFocus = cardEl;
-}
+      function openCalculator(item, cardEl) {
+        calcValue = 0; // reset or could load item qty if saved
+        calcTargetItem = item;
+        updateCalcDisplay();
+        popupCalculator.classList.add('active');
+        popupCalculator.focus();
+
+        // Accessibility: save last focused element so we can return later
+        lastFocus = cardEl;
+      }
       function closeCalculator() {
         popupCalculator.classList.remove('active');
         if (lastFocus) lastFocus.focus();
@@ -454,8 +442,7 @@ function openCalculator(itemName, cardEl) {
         closeCalculator();
       });
       document.getElementById('calc-validate').addEventListener('click', () => {
-        const currentItemName = document.getElementById('calc-title').textContent; // <-- MODIFIEZ CETTE LIGNE
-        alert(`Valeur validée: ${calcValue} pour l'élément "${currentItemName}"`); // <-- MODIFIEZ CETTE LIGNE
+        alert(`Valeur validée: ${calcValue} pour l'élément "${calcTargetItem.name}"`);
         closeCalculator();
       });
   // Search functionality
@@ -473,16 +460,13 @@ function openCalculator(itemName, cardEl) {
 
 
   // Add / Edit / Done buttons placeholder actions
-  // Note: Les IDs "addBtn" et "editBtn" ne sont pas présents dans le HTML fourni,
-  // mais "ajouterBtn" et "editerBtn" le sont.
-  // Assurez-vous d'utiliser les bons IDs.
-  document.getElementById("ajouterBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("addBtn").addEventListener("click", () => {
     alert("Ajouter un élément - Action simulée.");
   });
-  document.getElementById("editerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("editBtn").addEventListener("click", () => {
     alert("Éditer un élément - Action simulée.");
   });
-  document.getElementById("terminerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("doneBtn").addEventListener("click", () => {
     alert("Action J'ai terminé - Simulation.");
   });
 

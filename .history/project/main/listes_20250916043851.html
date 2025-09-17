@@ -306,16 +306,15 @@
       <section class="modal-section modal-options-section">
         <label class="modal-label">2. OPTIONS</label>
         <div class="options-row">
-<button type="button" class="option-item" id="dateOptionButton">
-  <div class="icon calendar-icon" aria-hidden="true"></div>
-  <input type="date" id="selectedDate" value="2025-09-12" class="option-text" style="border: none; background: none; font-size: 14px; cursor: pointer; text-align: left; padding: 0; margin-left: 8px; flex-grow: 1;">
-</button>
-    
+          <button type="button" class="option-item">
+            <div class="icon calendar-icon" aria-hidden="true"></div>
+            <div class="option-text">Vendredi 12 septembre 2025</div>
+          </button>
           <div class="vertical-divider" aria-hidden="true"></div>
-<button type="button" class="option-item" id="addNotePhotoButton">
-  <div class="icon note-icon" aria-hidden="true"></div>
-  <div class="option-text">AJOUTER UNE NOTE / PHOTO</div>
-</button>
+          <button type="button" class="option-item">
+            <div class="icon note-icon" aria-hidden="true"></div>
+            <div class="option-text">AJOUTER UNE NOTE / PHOTO</div>
+          </button>
         </div>
       </section>
 
@@ -437,15 +436,6 @@
       setTimeout(() => {
         terminerBtn.disabled = false;
       }, 3000);
-    });
-
-    document.getElementById('addNotePhotoButton').addEventListener('click', function() {
-
-      window.location.href = 'note.html'; 
-    });
-    document.getElementById('selectedDate').addEventListener('change', function() {
-        console.log('Nouvelle date sélectionnée :', this.value);
-
     });
   </script>
 </body>

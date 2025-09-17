@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter Note / Photo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Assurez-vous que votre fichier styles.css est lié -->
+    <style>
+    
+        main {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+       
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+            box-sizing: border-box; /* Important pour inclure le padding dans la largeur */
+        }
+        input[type="file"] {
+            display: block;
+            margin-top: 8px;
+        }
+        .image-preview {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        .button-container .cancel-btn {
+            background-color: #ccc;
+            color: #333;
+        }
+        .button-container .cancel-btn:hover {
+            background-color: #bbb;
+        }
+        .button-container .save-btn {
+            background-color: #4b6d6c;
+            color: white;
+        }
+        .button-container .save-btn:hover {
+            background-color: #3b5453;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <button id="backButton" class="back-button" aria-label="Retour">&#8592;</button>
+        <h1 class="page-title">AJOUTER UNE NOTE / PHOTO</h1>
+    </header>
+
+    <main>
+        <div class="form-group">
+            <label for="noteText">Note :</label>
+            <textarea id="noteText" placeholder="Écrivez votre note ici..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="photoUpload">Ajouter une photo :</label>
+            <input type="file" id="photoUpload" accept="image/*" multiple>
+            <div class="image-preview" id="imagePreview">
+              
+        </div>
+
+        <div class="button-container">
+            <button type="button" class="cancel-btn" id="cancelNotePhoto">Annuler</button>
+            <button type="button" class="save-btn" id="saveNotePhoto">Enregistrer</button>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back(); // Retourne à la page précédente
+        });
+
+        document.getElementById('cancelNotePhoto').addEventListener('click', function() {
+            window.history.back(); // Retourne à la page précédente
+        });
+
+        document.getElementById('saveNotePhoto').addEventListener('click', function() {
+            const note = document.getElementById('noteText').value;
+            const photos = document.getElementById('photoUpload').files;
+
+            // Ici, vous enverriez la note et les photos à un serveur ou les traiteriez localement
+            console.log('Note enregistrée :', note);
+            console.log('Photos sélectionnées :', photos);
+
+            alert('Note et photos enregistrées (simulation) !');
+            window.history.back(); // Retourne à la page précédente après enregistrement
+        });
+
+        // Prévisualisation des images
+        document.getElementById('photoUpload').addEventListener('change', function(event) {
+            const previewContainer = document.getElementById('imagePreview');
+            previewContainer.innerHTML = ''; // Efface les prévisualisations précédentes
+
+            const files = event.target.files;
+            if (files) {
+                Array.from(files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = file.name;
+                            previewContainer.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

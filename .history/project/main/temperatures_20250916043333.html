@@ -257,53 +257,12 @@
       <article class="card" tabindex="0">
         <div class="card-header">Cf viandes</div>
         <div class="card-image">
-          <img src="https://placeholder-image-service.onrender.com/image/100x90?prompt=large-industrial-fridge-metal-door" alt="Large industrial fridge with metal door closed" />
+          <img src="" alt="Industrial fridge door for meat storage" />
         </div>
       </article>
     </div>
   </section>
 </main>
- <!-- Calculator Popup -->
-  <div class="popup-overlay" id="popup-calculator" role="dialog" aria-modal="true" aria-labelledby="calc-title" tabindex="-1">
-    <div class="popup-window" role="document">
-      <header class="popup-header">
-        <span id="calc-title">A-VITRINE DESSERT</span>
-        <button class="popup-close" aria-label="Close Calculator popup" id="calc-close">&times;</button>
-      </header>
-      <section class="popup-content calculator" aria-describedby="calc-desc">
-        <div id="calc-desc" class="sr-only">Machine à calculer pour imprimer la quantité</div>
-        <div class="calculator-controls" aria-label="Contrôles principaux">
-          <button class="calc-btn operator" id="calc-decrement" aria-label="Décrémenter la valeur">−</button>
-          <div class="calculator-display" aria-live="polite" aria-atomic="true" aria-relevant="text" id="calc-display">0</div>
-          <button class="calc-btn operator" id="calc-increment" aria-label="Incrémenter la valeur">+</button>
-        </div>
-        <div class="calculator-controls" aria-label="Touches numériques">
-          <button class="calc-btn" data-num="1">1</button>
-          <button class="calc-btn" data-num="2">2</button>
-          <button class="calc-btn" data-num="3">3</button>
-        </div>
-        <div class="calculator-controls" aria-label="Touches numériques">
-          <button class="calc-btn" data-num="4">4</button>
-          <button class="calc-btn" data-num="5">5</button>
-          <button class="calc-btn" data-num="6">6</button>
-        </div>
-        <div class="calculator-controls" aria-label="Touches numériques">
-          <button class="calc-btn" data-num="7">7</button>
-          <button class="calc-btn" data-num="8">8</button>
-          <button class="calc-btn" data-num="9">9</button>
-        </div>
-        <div class="calculator-controls" aria-label="Touches numériques additionnelles">
-          <button class="calc-btn action" id="calc-clear">C</button>
-          <button class="calc-btn" data-num="0">0</button>
-          <button class="calc-btn action" id="calc-del">Del</button>
-        </div>
-        <div style="margin-top: 1rem; display:flex; justify-content: space-between;">
-          <button id="calc-cancel" class="popup-actions cancel-btn" aria-label="Annuler la saisie">Annuler</button>
-          <button id="calc-validate" class="popup-actions" aria-label="Valider la saisie">Valider</button>
-        </div>
-      </section>
-    </div>
-  </div>
 
  <div class="bottom-bar">
     <button id="ajouterBtn" class="btn-action" aria-haspopup="dialog" onclick="openAddModal()">+ Ajouter un élément</button>
@@ -317,14 +276,10 @@
   </div>
 
 <script>
-  // Déclarations globales nécessaires
-  let calcValue = 0;
-  let lastFocus = null;
-  const popupCalculator = document.getElementById('popup-calculator'); // <-- AJOUTEZ CETTE LIGNE
 
-  backToPage1.addEventListener('click', () => {
-    window.history.back();
-  });
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
   // Tab switching
   const tabs = document.querySelectorAll(".tab-btn");
   const sections = document.querySelectorAll("main > section");
@@ -353,111 +308,30 @@
     });
   });
 
- // Accordion toggle for sections
-const sectionHeaders = document.querySelectorAll(".section-header");
-sectionHeaders.forEach(header => {
-  header.addEventListener("click", () => {
-    const expanded = header.getAttribute("aria-expanded") === "true";
-    const cardsContainer = header.nextElementSibling;
-    if (expanded) {
-      header.setAttribute("aria-expanded", "false");
-      header.querySelector(".toggle-icon").innerHTML = "&#9660;";
-      cardsContainer.style.display = "none";
-    } else {
-      header.setAttribute("aria-expanded", "true");
-      header.querySelector(".toggle-icon").innerHTML = "&#9650;";
-      cardsContainer.style.display = "grid";
-    }
-  });
-
-  header.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      header.click();
-    }
-  });
-
-  // Ajout des écouteurs d'événements pour les cartes à l'intérieur de chaque section
-  const cards = header.nextElementSibling.querySelectorAll('.card');
-  cards.forEach(card => {
-    const itemName = card.querySelector('.card-header').textContent; // Récupère le nom de l'élément
-
-    card.addEventListener('click', () => {
-      openCalculator(itemName, card); // Passe le nom de l'élément
+  // Accordion toggle for sections
+  const sectionHeaders = document.querySelectorAll(".section-header");
+  sectionHeaders.forEach(header => {
+    header.addEventListener("click", () => {
+      const expanded = header.getAttribute("aria-expanded") === "true";
+      const cardsContainer = header.nextElementSibling;
+      if(expanded){
+        header.setAttribute("aria-expanded", "false");
+        header.querySelector(".toggle-icon").innerHTML = "&#9660;";
+        cardsContainer.style.display = "none";
+      } else {
+        header.setAttribute("aria-expanded", "true");
+        header.querySelector(".toggle-icon").innerHTML = "&#9650;";
+        cardsContainer.style.display = "grid";
+      }
     });
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        openCalculator(itemName, card); // Passe le nom de l'élément
+        header.click();
       }
     });
   });
-});
 
-  // Open calculator popup with selected item
-function openCalculator(itemName, cardEl) {
-  calcValue = 0; // reset or could load item qty if saved
-  document.getElementById('calc-title').textContent = itemName; // Ajouté pour mettre à jour le titre
-  updateCalcDisplay();
-  popupCalculator.classList.add('active');
-  popupCalculator.focus();
-  // Accessibility: save last focused element so we can return later
-  lastFocus = cardEl;
-}
-      function closeCalculator() {
-        popupCalculator.classList.remove('active');
-        if (lastFocus) lastFocus.focus();
-      }
-      // Calculator display update
-      function updateCalcDisplay() {
-        const display = document.getElementById('calc-display');
-        display.textContent = calcValue.toString();
-      }
-
-      // Calculator controls
-      document.getElementById('calc-increment').addEventListener('click', () => {
-        calcValue++;
-        updateCalcDisplay();
-      });
-      document.getElementById('calc-decrement').addEventListener('click', () => {
-        if (calcValue > 0) {
-          calcValue--;
-          updateCalcDisplay();
-        }
-      });
-      document.getElementById('calc-clear').addEventListener('click', () => {
-        calcValue = 0;
-        updateCalcDisplay();
-      });
-      document.getElementById('calc-del').addEventListener('click', () => {
-        // Delete last digit (as string)
-        let s = calcValue.toString();
-        s = s.length > 1 ? s.slice(0, -1) : '0';
-        calcValue = parseInt(s, 10);
-        updateCalcDisplay();
-      });
-      document.querySelectorAll('.calc-btn[data-num]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          let digit = btn.dataset.num;
-          if (digit !== undefined) {
-            // Append digit avoiding leading zero
-            if (calcValue === 0) calcValue = parseInt(digit, 10);
-            else calcValue = parseInt(calcValue.toString() + digit, 10);
-            updateCalcDisplay();
-          }
-        });
-      });
-      document.getElementById('calc-cancel').addEventListener('click', () => {
-        closeCalculator();
-      });
-      document.getElementById('calc-close').addEventListener('click', () => {
-        closeCalculator();
-      });
-      document.getElementById('calc-validate').addEventListener('click', () => {
-        const currentItemName = document.getElementById('calc-title').textContent; // <-- MODIFIEZ CETTE LIGNE
-        alert(`Valeur validée: ${calcValue} pour l'élément "${currentItemName}"`); // <-- MODIFIEZ CETTE LIGNE
-        closeCalculator();
-      });
   // Search functionality
   const searchInput = document.getElementById("searchInput");
   searchInput.addEventListener("input", e => {
@@ -473,16 +347,13 @@ function openCalculator(itemName, cardEl) {
 
 
   // Add / Edit / Done buttons placeholder actions
-  // Note: Les IDs "addBtn" et "editBtn" ne sont pas présents dans le HTML fourni,
-  // mais "ajouterBtn" et "editerBtn" le sont.
-  // Assurez-vous d'utiliser les bons IDs.
-  document.getElementById("ajouterBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("addBtn").addEventListener("click", () => {
     alert("Ajouter un élément - Action simulée.");
   });
-  document.getElementById("editerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("editBtn").addEventListener("click", () => {
     alert("Éditer un élément - Action simulée.");
   });
-  document.getElementById("terminerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("doneBtn").addEventListener("click", () => {
     alert("Action J'ai terminé - Simulation.");
   });
 

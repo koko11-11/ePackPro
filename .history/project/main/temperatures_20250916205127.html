@@ -317,14 +317,10 @@
   </div>
 
 <script>
-  // Déclarations globales nécessaires
-  let calcValue = 0;
-  let lastFocus = null;
-  const popupCalculator = document.getElementById('popup-calculator'); // <-- AJOUTEZ CETTE LIGNE
 
-  backToPage1.addEventListener('click', () => {
-    window.history.back();
-  });
+    backToPage1.addEventListener('click', () => {
+  window.history.back();
+});
   // Tab switching
   const tabs = document.querySelectorAll(".tab-btn");
   const sections = document.querySelectorAll("main > section");
@@ -395,8 +391,9 @@ sectionHeaders.forEach(header => {
 });
 
   // Open calculator popup with selected item
-function openCalculator(itemName, cardEl) {
+function openCalculator(itemName, cardEl) { // Modifié pour accepter itemName
   calcValue = 0; // reset or could load item qty if saved
+  // calcTargetItem = item; // Cette ligne n'est plus nécessaire si vous utilisez itemName directement pour le titre
   document.getElementById('calc-title').textContent = itemName; // Ajouté pour mettre à jour le titre
   updateCalcDisplay();
   popupCalculator.classList.add('active');
@@ -454,8 +451,7 @@ function openCalculator(itemName, cardEl) {
         closeCalculator();
       });
       document.getElementById('calc-validate').addEventListener('click', () => {
-        const currentItemName = document.getElementById('calc-title').textContent; // <-- MODIFIEZ CETTE LIGNE
-        alert(`Valeur validée: ${calcValue} pour l'élément "${currentItemName}"`); // <-- MODIFIEZ CETTE LIGNE
+        alert(`Valeur validée: ${calcValue} pour l'élément "${calcTargetItem.name}"`);
         closeCalculator();
       });
   // Search functionality
@@ -473,16 +469,13 @@ function openCalculator(itemName, cardEl) {
 
 
   // Add / Edit / Done buttons placeholder actions
-  // Note: Les IDs "addBtn" et "editBtn" ne sont pas présents dans le HTML fourni,
-  // mais "ajouterBtn" et "editerBtn" le sont.
-  // Assurez-vous d'utiliser les bons IDs.
-  document.getElementById("ajouterBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("addBtn").addEventListener("click", () => {
     alert("Ajouter un élément - Action simulée.");
   });
-  document.getElementById("editerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("editBtn").addEventListener("click", () => {
     alert("Éditer un élément - Action simulée.");
   });
-  document.getElementById("terminerBtn").addEventListener("click", () => { // <-- Vérifiez l'ID ici
+  document.getElementById("doneBtn").addEventListener("click", () => {
     alert("Action J'ai terminé - Simulation.");
   });
 
